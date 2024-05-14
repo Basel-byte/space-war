@@ -1,0 +1,3 @@
+D:/Computer and Systems Engineering/8th Semster/Graphics/space-war/build/CMakeFiles/space_war.dir
+D:/Computer and Systems Engineering/8th Semster/Graphics/space-war/build/CMakeFiles/edit_cache.dir
+D:/Computer and Systems Engineering/8th Semster/Graphics/space-war/build/CMakeFiles/rebuild_cache.dir

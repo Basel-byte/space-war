@@ -439,7 +439,7 @@ public:
 
         for (float *f : normals)
             delete f;
-            
+
         normals.clear();
         faces.clear();
     }

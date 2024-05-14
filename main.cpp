@@ -2,11 +2,11 @@
 
 int POS_X, POS_Y;
 
-std::string model_name = "Models/Earth.obj";
-std::string space_craft = "Models/shuttle/shuttle.obj";
-std::string enemy_craft = "Models/flying-saucer/Low_poly_UFO.obj";
-std::string player_missile = "Models/missile/missile.obj";
-std::string enemy_missile = "Models/rocket/rocket.obj";
+std::string model_name = "models/Earth.obj";
+std::string space_craft = "models/shuttle/shuttle.obj";
+std::string enemy_craft = "models/flying-saucer/Low_poly_UFO.obj";
+std::string player_missile = "models/missile/missile.obj";
+std::string enemy_missile = "models/rocket/rocket.obj";
 
 GLfloat light_pos[] = {-10.0f, 10.0f, 100.00f, 1.0f};
 
