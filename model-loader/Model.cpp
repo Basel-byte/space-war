@@ -1,4 +1,4 @@
-#include "model-loader/Model.h"
+#include "Model.h"
 
 int Model::count_char(std::string &str, char ch)
 {

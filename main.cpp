@@ -1,4 +1,4 @@
-#include "model.h"
+#include "model-loader/Model.h"
 
 int POS_X, POS_Y;
 
