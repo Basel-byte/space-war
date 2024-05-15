@@ -5,7 +5,8 @@
 #include <GL/glew.h>
 
 #include <SOIL/SOIL.h>
-#include "Planet.h"
+#include "SpaceObject.h"
+#include <SOIL/SOIL.h>
 GLuint moonTexture;
 
 // SpaceObject default constructor.
@@ -17,14 +18,11 @@ SpaceObject::SpaceObject()
     centerZ = 0.0;
     radius = 0.0;
     angle = 0.0;
-    color[0] = 0;
-    color[1] = 0;
-    color[2] = 0;
 }
 
+
 // SpaceObject constructor.
-SpaceObject::SpaceObject(std::string planetId, float x, float y, float z, float r, float a, unsigned int colorR,
-                         unsigned int colorG, unsigned int colorB, GLuint textureID)
+SpaceObject::SpaceObject(std::string planetId, float x, float y, float z, float r, float a, GLuint textureID)
 {
     id = planetId;
     centerX = x;
@@ -35,30 +33,13 @@ SpaceObject::SpaceObject(std::string planetId, float x, float y, float z, float 
     currentZ = z;
     radius = r;
     angle = a;
-    color[0] = colorR;
-    color[1] = colorG;
-    color[2] = colorB;
     this->textureID = textureID;
     if (id == "earth")
     {
-        moonTexture = SOIL_load_OGL_texture("src\\textures\\moon.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+        moonTexture = SOIL_load_OGL_texture("src/textures/moon.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
     }
 }
-const int NumberOfPlanets = 9;
-static float rShininess[NumberOfPlanets] = {0, 1.5, 2.5, 3.5, 7, 150, 15, 50, 70},
-             gShininess[NumberOfPlanets] = {0, 1.5, 2.5, 3.5, 7, 150, 15, 50, 70},
-             bShininess[NumberOfPlanets] = {0, 1.5, 2.5, 2.5, 7, 150, 15, 10, 15};
-static unsigned int rAmbient[NumberOfPlanets] = {242, 85, 131, 3, 161, 157, 132, 18, 23},
-                    gAmbient[NumberOfPlanets] = {208, 85, 82, 61, 45, 115, 112, 113, 52},
-                    bAmbient[NumberOfPlanets] = {34, 85, 12, 95, 29, 89, 101, 141, 172};
 
-static unsigned int rSpecular[NumberOfPlanets] = {242, 5, 91, 3, 121, 117, 92, 0, 0},
-                    gSpecular[NumberOfPlanets] = {208, 5, 42, 21, 5, 75, 72, 73, 12},
-                    bSpecular[NumberOfPlanets] = {34, 5, 2, 55, 0, 49, 61, 101, 132};
-
-static unsigned int rDiffuse[NumberOfPlanets] = {242, 115, 191, 33, 191, 217, 242, 38, 53},
-                    gDiffuse[NumberOfPlanets] = {208, 115, 112, 91, 75, 175, 224, 133, 82},
-                    bDiffuse[NumberOfPlanets] = {34, 115, 42, 125, 59, 139, 201, 191, 242};
 void SpaceObject::drawSubRoutine()
 {
     GLfloat sunDiffuse[] = {(GLfloat)115 / 256, (GLfloat)115 / 256, (GLfloat)155 / 256,
@@ -67,8 +48,6 @@ void SpaceObject::drawSubRoutine()
                             1.0};
     GLfloat sunSpecular[] = {(GLfloat)5, (GLfloat)5, (GLfloat)5, 1.0};
     GLfloat sunShininess[] = {(GLfloat)5, (GLfloat)5, (GLfloat)5, 1.0};
-
-    glColor3ubv(color);
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, sunAmbient);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, sunDiffuse);
@@ -98,9 +77,6 @@ void SpaceObject::drawSubRoutine()
     glDisable(GL_TEXTURE_2D);
 }
 
-GLfloat moonColor[3] = {(GLfloat)90 / 256, (GLfloat)90 / 256, (GLfloat)90 / 256};
-GLfloat ringColor1[3] = {(GLfloat)166 / 256, (GLfloat)98 / 256, (GLfloat)73 / 256};
-GLfloat ringColor2[3] = {(GLfloat)150 / 256, (GLfloat)70 / 256, (GLfloat)73 / 256};
 GLfloat ringColor3[3] = {(GLfloat)130 / 256, (GLfloat)80 / 256, (GLfloat)50 / 256};
 void SpaceObject::draw()
 {
@@ -146,9 +122,7 @@ void SpaceObject::draw()
         }
         if (id == "earth")
         {
-            // rotate the moon around earth
-            glMaterialfv(GL_FRONT, GL_AMBIENT, moonColor);
-            glMaterialfv(GL_FRONT, GL_DIFFUSE, moonColor);
+
             glRotatef(10 * 0.0, 0.0, 1.0, 0.2);
             glTranslatef(7, 0, 0);
             glBindTexture(GL_TEXTURE_2D, moonTexture);
@@ -179,10 +153,6 @@ void SpaceObject::draw()
             glutSolidTorus(2, 16, 75, 75);
         }
         glPopMatrix();
-
-        // setCurrentX(centerX * (float)cos(angle * M_PI / 180));
-        // setCurrentY(centerY);
-        // setCurrentZ(-1 * centerX * (float)sin(angle * M_PI / 180));
     }
 }
 

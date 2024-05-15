@@ -1,14 +1,12 @@
-//
-// Created by Amr Magdy on 5/8/2023.
-//
 
-#ifndef COSMICSPHERE_H
-#define COSMICSPHERE_H
+#ifndef SPACEOBJECT_H
+#define SPACEOBJECT_H
 
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/freeglut_std.h>
 #include <SOIL/SOIL.h>
+#define numberOfPlanets 9 // Number of rows of asteroids.
 using namespace std;
 
 // SpaceObject class.
@@ -17,8 +15,7 @@ class SpaceObject
 public:
     SpaceObject();
 
-    SpaceObject(std::string planetId, float x, float y, float z, float r, float a, unsigned int colorR,
-                unsigned int colorG, unsigned int colorB, GLuint textureID);
+    SpaceObject(std::string planetId, float x, float y, float z, float r, float a, GLuint textureID);
 
     float getCenterX() { return centerX; }
 
@@ -51,7 +48,6 @@ public:
 private:
     std::string id;
     float centerX, centerY, centerZ, currentX, currentY, currentZ, radius, angle;
-    unsigned char color[3];
     GLuint textureID;
 };
 #endif // COSMICSPHERE_H
