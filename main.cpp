@@ -2,7 +2,6 @@
 
 int POS_X, POS_Y;
 
-std::string model_name = "models/Earth.obj";
 std::string space_craft = "models/shuttle/shuttle.obj";
 std::string enemy_craft = "models/flying-saucer/Low_poly_UFO.obj";
 std::string player_missile = "models/missile/missile.obj";
@@ -42,7 +41,7 @@ void init()
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
 
-    model.load(space_craft.c_str());
+    model.load(enemy_craft.c_str());
 
     pos_x = model.pos_x;
     pos_y = model.pos_y;

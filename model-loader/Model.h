@@ -18,7 +18,7 @@
 #define WIDTH 600
 #define HEIGHT 600
 
-#define INTERVAL 15
+#define INTERVAL 2
 
 class Model {
 private:
@@ -47,10 +47,12 @@ private:
 
 public:
     float pos_x, pos_y, pos_z;
+    float tx, ty, tz;
+    float rx, ry, rz;
 
     void load(const char *filename);
     void draw();
-
+    bool checkCollision(Model another);
     ~Model();
 };
 

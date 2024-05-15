@@ -1,5 +1,9 @@
 #include "Model.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "../stb_image.h"
+
+
 int Model::count_char(std::string &str, char ch)
 {
     int c = 0;
@@ -80,14 +84,27 @@ void Model::load_material(const char *filename)
         {
             sscanf(line.c_str(), "map_Kd %s", str);
             std::string file = prefix + str;
-            // Image img;
-            // Load_Texture_Swap(&img, file.c_str());
-            // glGenTextures(1, &(m->texture));
-            // glBindTexture(GL_TEXTURE_2D, m->texture);
-            // glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.w, img.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.img);
-            // glBindTexture(GL_TEXTURE_2D, 0);
-            // Delete_Image(&img);
+            std::cout << file << "\n";
+            glGenTextures(1, &m->texture);
+            glBindTexture(GL_TEXTURE_2D, m->texture);
+
+            int width, height, nrChannels;
+            unsigned char *img = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
+            if (!img)
+            {
+                std::cout << "Failed to load texture" << std::endl;
+                exit(-1);
+            }
+
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+            if (nrChannels == 3)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
+
+            else if (nrChannels == 4)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
+
+            stbi_image_free(img);
         }
     }
 }
@@ -345,7 +362,18 @@ void Model::load(const char *filename)
     this->~Model();
 }
 
-void Model::draw() { glCallList(list); }
+void Model::draw() {
+    // demo to move object
+    // tx += 0.1;
+    // glPushMatrix();
+    //     glTranslatef(tx, 0.0f, 0.0f);
+        glCallList(list); 
+    // glPopMatrix();
+}
+
+bool Model::checkCollision(Model another) {
+    return true;
+}
 
 Model::~Model()
 {
