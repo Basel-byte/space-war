@@ -15,7 +15,7 @@ class SpaceObject
 public:
     SpaceObject();
 
-    SpaceObject(std::string planetId, float x, float y, float z, float r, float a, GLuint textureID);
+    SpaceObject(std::string name, float x, float y, float z, float r, float a, string fileName);
 
     float getCenterX() { return centerX; }
 
@@ -46,7 +46,7 @@ public:
     float getCurrentZ() const;
 
 private:
-    std::string id;
+    std::string name;
     float centerX, centerY, centerZ, currentX, currentY, currentZ, radius, angle;
     GLuint textureID;
 };

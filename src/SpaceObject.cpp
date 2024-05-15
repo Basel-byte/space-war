@@ -12,7 +12,7 @@ GLuint moonTexture;
 // SpaceObject default constructor.
 SpaceObject::SpaceObject()
 {
-    id = "";
+    name = "";
     centerX = 0.0;
     centerY = 0.0;
     centerZ = 0.0;
@@ -20,11 +20,10 @@ SpaceObject::SpaceObject()
     angle = 0.0;
 }
 
-
 // SpaceObject constructor.
-SpaceObject::SpaceObject(std::string planetId, float x, float y, float z, float r, float a, GLuint textureID)
+SpaceObject::SpaceObject(std::string planetId, float x, float y, float z, float r, float a, string fileName)
 {
-    id = planetId;
+    name = planetId;
     centerX = x;
     centerY = y;
     centerZ = z;
@@ -33,8 +32,11 @@ SpaceObject::SpaceObject(std::string planetId, float x, float y, float z, float 
     currentZ = z;
     radius = r;
     angle = a;
+    textureID = SOIL_load_OGL_texture(fileName.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+    if (textureID == 0)
+        printf("SOIL loading error: '%s'\n", SOIL_last_result());
     this->textureID = textureID;
-    if (id == "earth")
+    if (name == "earth")
     {
         moonTexture = SOIL_load_OGL_texture("src/textures/moon.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
     }
@@ -93,7 +95,7 @@ void SpaceObject::draw()
         float lightPos0[] = {1.0, 1.0, 1.0, 1}; // Demo: last value p define whether it is direction or positional
         float globAmb[] = {.9, .9, .9, 1.0};
 
-        if (id == "sun")
+        if (name == "sun")
         {
             // Draw light source spheres (or arrow) after disabling lighting.
             glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
@@ -120,7 +122,7 @@ void SpaceObject::draw()
             glDisable(GL_TEXTURE_2D);
             glEnable(GL_LIGHTING);
         }
-        if (id == "earth")
+        if (name == "earth")
         {
 
             glRotatef(10 * 0.0, 0.0, 1.0, 0.2);
@@ -144,7 +146,7 @@ void SpaceObject::draw()
             // Disable texturing
             glDisable(GL_TEXTURE_2D);
         }
-        if (id == "saturn")
+        if (name == "saturn")
         {
             // rotate the ring around saturn
             glRotatef(115, 1.0, 0.0, 0.0);

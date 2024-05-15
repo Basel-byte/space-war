@@ -173,13 +173,9 @@ void init()
         string filename = "src/textures/" + planetNames[i] + ".jpg";
 
         const char *filename_cstr = filename.c_str();
-        // glActiveTexture(GL_TEXTURE0);
-        GLuint textureID = SOIL_load_OGL_texture(filename_cstr, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-        if (textureID == 0)
-            printf("SOIL loading error: '%s'\n", SOIL_last_result());
 
         planets[i] = new SpaceObject(planetNames[i], planetsPositions[i], 0.0, 0.0, planetsRadius[i],
-                                     0.0, textureID);
+                                     0.0, filename_cstr);
     }
 }
 
