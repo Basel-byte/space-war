@@ -7,7 +7,10 @@ void display()
 {
     if (!isStarted)
     {
+        glViewport(0, 0, width, height);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         glLoadIdentity();
         // Set up the camera for the menu
         gluLookAt(0, 0, 244.0f,   // Camera position
