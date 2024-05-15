@@ -53,7 +53,7 @@ public:
     void load(const char *filename);
     void draw();
     bool checkCollision(Model another);
-    ~Model();
+    // ~Model();
 };
 
 

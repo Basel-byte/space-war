@@ -359,7 +359,7 @@ void Model::load(const char *filename)
     printf("Pos_Y: %f\n", pos_y);
     printf("Pos_Z: %f\n", pos_z);
 
-    this->~Model();
+    // this->~Model();
 }
 
 void Model::draw() {
@@ -375,31 +375,31 @@ bool Model::checkCollision(Model another) {
     return true;
 }
 
-Model::~Model()
-{
-    for (Material &material : materials)
-    {
-        delete material.ambient;
-        delete material.diffuse;
-        delete material.specular;
-    }
+// Model::~Model()
+// {
+//     for (Material &material : materials)
+//     {
+//         delete material.ambient;
+//         delete material.diffuse;
+//         delete material.specular;
+//     }
 
-    materials.clear();
-    map_material.clear();
+//     materials.clear();
+//     map_material.clear();
 
-    for (float *f : vertices)
-        delete f;
+//     for (float *f : vertices)
+//         delete f;
 
-    vertices.clear();
+//     vertices.clear();
 
-    for (float *f : texcoords)
-        delete f;
+//     for (float *f : texcoords)
+//         delete f;
 
-    texcoords.clear();
+//     texcoords.clear();
 
-    for (float *f : normals)
-        delete f;
+//     for (float *f : normals)
+//         delete f;
 
-    normals.clear();
-    faces.clear();
-}
+//     normals.clear();
+//     faces.clear();
+// }

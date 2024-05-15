@@ -38,7 +38,7 @@ SpaceObject::SpaceObject(std::string planetId, float x, float y, float z, float 
     this->textureID = textureID;
     if (name == "earth")
     {
-        moonTexture = SOIL_load_OGL_texture("src/textures/moon.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+        moonTexture = SOIL_load_OGL_texture("textures/moon.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
     }
 }
 

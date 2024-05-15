@@ -2,6 +2,11 @@
 
 #include <SOIL/SOIL.h>
 #include "SpaceObject.h"
+
+// #include "../spacecrafts/EnemyManager.h"
+#include "../model-loader/Model.h"
+#include "../animation/animation.h"
+
 #define numberOfPlanets 9
 static int width = 960, height = 580;
 int selected = 0;
@@ -28,7 +33,7 @@ GLuint skyboxTextureID; // Texture IDs for each face of the skybox
 void loadSkyboxTextures()
 {
     const char *skyboxFileNames =
-        "src/textures/space2.jpg";
+        "textures/space2.jpg";
 
     skyboxTextureID = SOIL_load_OGL_texture(skyboxFileNames, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
     if (skyboxTextureID == 0)
@@ -170,12 +175,30 @@ void drawSpace()
               0.0,
               1.0,
               0.0);
+
+    /*
+     * Animation
+     */
+    spacecraftFirstPersonView();
+
     // Draw light source spheres (or arrow) after disabling lighting.
     glDisable(GL_LIGHTING);
     // Draw all the asteroids in arrayAsteroids.
 
     for (int i = 0; i < numberOfPlanets; i++)
+    {
+        glPushMatrix();
+        glRotatef(planetRotations[i], 0.0, 1.0, 0.0); // Rotate around the y-axis
+        // Translate to the position of the planet and draw it
         (*planets[i]).draw();
+
+        glPopMatrix();
+    }
+
+    glPushMatrix();
+    enemyManager.draw();
+    glPopMatrix();
+
     // End Large viewport.
 
     glEnable(GL_SCISSOR_TEST);
@@ -196,14 +219,20 @@ void drawSpace()
 
     // Draw all the asteroids in arrayAsteroids.
     for (int i = 0; i < numberOfPlanets; i++)
+    {
+        glPushMatrix();
+        glRotatef(planetRotations[i], 0.0, 1.0, 0.0); // Rotate around the y-axis
         (*planets[i]).draw();
+        glPopMatrix();
+    }
 
-    // Draw spacecraft.
+    drawSmallPortSpaceCraft(spaceCraftAngle,  xVal,  zVal);
+
     glPushMatrix();
-    glTranslatef(xVal, 0.0, zVal);
-    glRotatef(spaceCraftAngle, 0.0, 1.0, 0.0);
-    glCallList(spacecraft);
+    enemyManager.draw();
     glPopMatrix();
+
+
     // End Small viewport.
 
     glutSwapBuffers();

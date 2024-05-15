@@ -3,6 +3,9 @@
 #include "menu.h"
 // 37 5 87.5
 #include "spaceDrawer.h"
+
+
+
 void display()
 {
     if (!isStarted)
@@ -46,42 +49,42 @@ void keyInput(unsigned char key, int x, int y)
 
         break;
 
-    case 'x':
-        xAngle += 5.0;
-        if (xAngle > 360.0)
-            xAngle -= 360.0;
-        glutPostRedisplay();
-        break;
-    case 'X':
-        xAngle -= 5.0;
-        if (xAngle < 0.0)
-            xAngle += 360.0;
-        glutPostRedisplay();
-        break;
-    case 'y':
-        yAngle += 5.0;
-        if (yAngle > 360.0)
-            yAngle -= 360.0;
-        glutPostRedisplay();
-        break;
-    case 'Y':
-        yAngle -= 5.0;
-        if (yAngle < 0.0)
-            yAngle += 360.0;
-        glutPostRedisplay();
-        break;
-    case 'z':
-        zAngle += 5.0;
-        if (zAngle > 360.0)
-            zAngle -= 360.0;
-        glutPostRedisplay();
-        break;
-    case 'Z':
-        zAngle -= 5.0;
-        if (zAngle < 0.0)
-            zAngle += 360.0;
-        glutPostRedisplay();
-        break;
+    // case 'x':
+    //     xAngle += 5.0;
+    //     if (xAngle > 360.0)
+    //         xAngle -= 360.0;
+    //     glutPostRedisplay();
+    //     break;
+    // case 'X':
+    //     xAngle -= 5.0;
+    //     if (xAngle < 0.0)
+    //         xAngle += 360.0;
+    //     glutPostRedisplay();
+    //     break;
+    // case 'y':
+    //     yAngle += 5.0;
+    //     if (yAngle > 360.0)
+    //         yAngle -= 360.0;
+    //     glutPostRedisplay();
+    //     break;
+    // case 'Y':
+    //     yAngle -= 5.0;
+    //     if (yAngle < 0.0)
+    //         yAngle += 360.0;
+    //     glutPostRedisplay();
+    //     break;
+    // case 'z':
+    //     zAngle += 5.0;
+    //     if (zAngle > 360.0)
+    //         zAngle -= 360.0;
+    //     glutPostRedisplay();
+    //     break;
+    // case 'Z':
+    //     zAngle -= 5.0;
+    //     if (zAngle < 0.0)
+    //         zAngle += 360.0;
+    //     glutPostRedisplay();
+    //     break;
     default:
         break;
     }
@@ -158,6 +161,11 @@ void init()
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
+    /*
+     * Initializing spacecraft & enemies
+     */
+    initAnimation(width, height);
+    glutTimerFunc(50, timer, 0);
 
     // Load skybox textures
     loadSkyboxTextures();
@@ -173,12 +181,44 @@ void init()
     glEndList();
     for (size_t i = 0; i < 9; i++)
     {
-        string filename = "src/textures/" + planetNames[i] + ".jpg";
+        string filename = "textures/" + planetNames[i] + ".jpg";
 
         const char *filename_cstr = filename.c_str();
 
         planets[i] = new SpaceObject(planetNames[i], planetsPositions[i], 0.0, 0.0, planetsRadius[i],
                                      0.0, filename_cstr);
+    }
+}
+
+int prevMouseX = 0;
+int prevMouseY = 0;
+
+
+void mouseMotion(int x, int y)
+{
+    // Check if there has been actual mouse movement
+    if (x != prevMouseX || y != prevMouseY)
+    {
+        // Calculate the change in mouse position
+        int deltaX = x - screenwidth / 2;
+        int deltaY = y - screenheight / 2;
+
+        // Calculate the angle between the mouse position and the center of the screen
+        float angle = atan2(deltaY, deltaX) * 180.0f / M_PI;
+        
+        // Adjust the angle to be in the range [0, 360]
+        if (angle < 0.0f)
+            angle += 360.0f;
+
+        // Update the spacecraft angle
+        spaceCraftAngle = angle;
+
+        // Update the previous mouse position
+        prevMouseX = x;
+        prevMouseY = y;
+
+        // Redraw the scene
+        glutPostRedisplay();
     }
 }
 
@@ -188,13 +228,18 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(960, 580);
-    glutCreateWindow("Sphere");
+    glutCreateWindow("Space War");
     init(); // Initialize OpenGL settings
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyInput);
     glutSpecialFunc(specialKeyInput);
+
+    // Set motion and passive motion callbacks
+    // glutMotionFunc(mouseMotion);
+    glutPassiveMotionFunc(mouseMotion);
+
     glutMainLoop();
     return 0;
 }
