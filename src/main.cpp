@@ -48,43 +48,10 @@ void keyInput(unsigned char key, int x, int y)
         glutPostRedisplay();
 
         break;
-
-    // case 'x':
-    //     xAngle += 5.0;
-    //     if (xAngle > 360.0)
-    //         xAngle -= 360.0;
-    //     glutPostRedisplay();
-    //     break;
-    // case 'X':
-    //     xAngle -= 5.0;
-    //     if (xAngle < 0.0)
-    //         xAngle += 360.0;
-    //     glutPostRedisplay();
-    //     break;
-    // case 'y':
-    //     yAngle += 5.0;
-    //     if (yAngle > 360.0)
-    //         yAngle -= 360.0;
-    //     glutPostRedisplay();
-    //     break;
-    // case 'Y':
-    //     yAngle -= 5.0;
-    //     if (yAngle < 0.0)
-    //         yAngle += 360.0;
-    //     glutPostRedisplay();
-    //     break;
-    // case 'z':
-    //     zAngle += 5.0;
-    //     if (zAngle > 360.0)
-    //         zAngle -= 360.0;
-    //     glutPostRedisplay();
-    //     break;
-    // case 'Z':
-    //     zAngle -= 5.0;
-    //     if (zAngle < 0.0)
-    //         zAngle += 360.0;
-    //     glutPostRedisplay();
-    //     break;
+    case 'v':
+        toggleViewMode();
+        glutPostRedisplay();
+        break;
     default:
         break;
     }

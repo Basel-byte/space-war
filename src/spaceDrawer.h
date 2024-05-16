@@ -136,6 +136,35 @@ void drawSkybox()
     glEnable(GL_LIGHTING);
     cout << "draw skybox" << endl;
 }
+
+// Set up camera for third-person view
+void setCamera()
+{
+    // Set up modelview matrix
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // Calculate camera position relative to the spacecraft
+    float cameraDistance = 10.0f; // Distance from the spacecraft
+    float cameraHeight = -0.3f;   // Height above the spacecraft (lowered slightly)
+    float angleOffset = 15.0f;    // Angle offset from the spacecraft's direction
+
+    // Calculate camera position
+    float cameraX = xVal - cameraDistance * sin((M_PI / 180.0) * spaceCraftAngle);
+    float cameraY = cameraHeight; // Adjust the height
+    float cameraZ = zVal - cameraDistance * cos((M_PI / 180.0) * spaceCraftAngle);
+
+    // Calculate look-at position
+    float lookAtX = xVal - 11 * sin((M_PI / 180.0) * spaceCraftAngle);
+    float lookAtY = -0.2f; // Look straight ahead
+    float lookAtZ = zVal - 11 * cos((M_PI / 180.0) * spaceCraftAngle);
+
+    // Position and orient the camera for third-person view
+    gluLookAt(cameraX, cameraY, cameraZ, // Camera position
+              lookAtX, lookAtY, lookAtZ, // Look at the specified point
+              0.0, 1.0, 0.0);            // Up vector
+}
+
 void drawSpace()
 {
 
@@ -166,25 +195,54 @@ void drawSpace()
     drawSkybox();
 
     // Locate the camera at the tip of the cone and pointing in the direction of the cone.
-    gluLookAt(xVal - 10 * sin((M_PI / 180.0) * spaceCraftAngle),
-              0.0,
-              zVal - 10 * cos((M_PI / 180.0) * spaceCraftAngle),
-              xVal - 11 * sin((M_PI / 180.0) * spaceCraftAngle),
-              0.0,
-              zVal - 11 * cos((M_PI / 180.0) * spaceCraftAngle),
-              0.0,
-              1.0,
-              0.0);
+    if (mode == firstPersonView)
+    {
+        gluLookAt(xVal - 10 * sin((M_PI / 180.0) * spaceCraftAngle),
+                  0.0,
+                  zVal - 10 * cos((M_PI / 180.0) * spaceCraftAngle),
+                  xVal - 11 * sin((M_PI / 180.0) * spaceCraftAngle),
+                  0.0,
+                  zVal - 11 * cos((M_PI / 180.0) * spaceCraftAngle),
+                  0.0,
+                  1.0,
+                  0.0);
+        glPushMatrix();
+        spacecraftFirstPersonView();
+        glPopMatrix();
+    }
+    else
+    {
+        /*
+         * Animation
+         */
+ 
 
-    /*
-     * Animation
-     */
-    spacecraftFirstPersonView();
+        // setCamera();
+ 
+        gluLookAt( xVal - 10 * sin((M_PI / 180.0) * spaceCraftAngle),
+                  0.0,
+                  zVal - 10 * cos((M_PI / 180.0) * spaceCraftAngle),
+                  xVal - 11 * sin((M_PI / 180.0) * spaceCraftAngle),
+                  0.0,
+                  zVal - 11 * cos((M_PI / 180.0) * spaceCraftAngle),
+                  0.0,
+                  1.0,
+                  0.0);
+
+        glPushMatrix();
+        spacecraftThirdPersonView();
+        glPopMatrix();
+
+    }
 
     // Draw light source spheres (or arrow) after disabling lighting.
     glDisable(GL_LIGHTING);
     // Draw all the asteroids in arrayAsteroids.
-
+    if(mode == thirdPersonView){
+        glPushMatrix();
+        glTranslatef(0.0f, 0.0f, -0.5f);
+        glTranslatef(0.0f, -0.5f, 0.0f);
+    }
     for (int i = 0; i < numberOfPlanets; i++)
     {
         glPushMatrix();
@@ -198,6 +256,12 @@ void drawSpace()
     glPushMatrix();
     enemyManager.draw();
     glPopMatrix();
+    if(mode == thirdPersonView ){
+        glPopMatrix();
+    }
+
+
+
 
     // End Large viewport.
 
@@ -226,12 +290,11 @@ void drawSpace()
         glPopMatrix();
     }
 
-    drawSmallPortSpaceCraft(spaceCraftAngle,  xVal,  zVal);
+    drawSmallPortSpaceCraft(spaceCraftAngle, xVal, zVal);
 
     glPushMatrix();
     enemyManager.draw();
     glPopMatrix();
-
 
     // End Small viewport.
 

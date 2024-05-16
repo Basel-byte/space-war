@@ -13,8 +13,16 @@ extern float craftAngle;
 extern float screenwidth;
 extern float screenheight;
 
+enum viewMode {
+    firstPersonView,
+    thirdPersonView
+};
+extern viewMode mode;
+
 void timer(int value);
+void spacecraftThirdPersonView();
 void spacecraftFirstPersonView();
 void drawSmallPortSpaceCraft(float spaceCraftAngle, float xVal, float zVal);
 void initAnimation(float width, float height);
+void toggleViewMode();
 #endif 
