@@ -3,8 +3,7 @@
 #include "menu.h"
 // 37 5 87.5
 #include "spaceDrawer.h"
-
-
+#include "../animation/animation.h"
 
 void display()
 {
@@ -51,6 +50,9 @@ void keyInput(unsigned char key, int x, int y)
     case 'v':
         toggleViewMode();
         glutPostRedisplay();
+        break;
+    case 'f': // For shooting Enemies
+        if(isStarted) addMissile();
         break;
     default:
         break;
@@ -148,7 +150,7 @@ void init()
     glEndList();
     for (size_t i = 0; i < 9; i++)
     {
-        string filename = "textures/" + planetNames[i] + ".jpg";
+        string filename = "src/textures/" + planetNames[i] + ".jpg";
 
         const char *filename_cstr = filename.c_str();
 
@@ -196,8 +198,8 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(960, 580);
     glutCreateWindow("Space War");
+    glEnable(GL_DEPTH_TEST);
     init(); // Initialize OpenGL settings
-
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyInput);

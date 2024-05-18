@@ -8,6 +8,8 @@
 
 extern Model spacecraftobj;
 extern EnemyManager enemyManager;
+extern MissileManager missileManager;
+
 extern float planetRotations[];
 extern float craftAngle;
 extern float screenwidth;
