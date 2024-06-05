@@ -3,8 +3,9 @@
 #include "menu.h"
 // 37 5 87.5
 #include "spaceDrawer.h"
+#include "health_bar.h"
 
-
+bool survivalMode = true; // true -> survival mode / false -> normal mode
 
 void display()
 {
@@ -28,6 +29,7 @@ void display()
     }
     else
     {
+        renderHealthBar();
         drawSpace();
     }
 }
@@ -199,6 +201,8 @@ int main(int argc, char **argv)
     init(); // Initialize OpenGL settings
 
     glutDisplayFunc(display);
+    if (survivalMode)
+        glutTimerFunc(reRenderTime, changeHealth, reRenderTime);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyInput);
     glutSpecialFunc(specialKeyInput);
