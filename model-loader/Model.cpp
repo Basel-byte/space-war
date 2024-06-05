@@ -1,8 +1,5 @@
 #include "Model.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "../stb_image.h"
-
+#include <SOIL/SOIL.h>
 
 int Model::count_char(std::string &str, char ch)
 {
@@ -89,7 +86,7 @@ void Model::load_material(const char *filename)
             glBindTexture(GL_TEXTURE_2D, m->texture);
 
             int width, height, nrChannels;
-            unsigned char *img = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
+            unsigned char *img = SOIL_load_image(file.c_str(), &width, &height, &nrChannels, 0);
             if (!img)
             {
                 std::cout << "Failed to load texture" << std::endl;
@@ -104,8 +101,7 @@ void Model::load_material(const char *filename)
             else if (nrChannels == 4)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
 
-            stbi_image_free(img);
-        }
+            SOIL_free_image_data(img);        }
     }
 }
 
