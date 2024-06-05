@@ -1,0 +1,11 @@
+ 
+bin
+lib
+include
+ 
+.idea
+.vscode
+build
+CMakeLists.txt
+cmake-build-debug
+ 
