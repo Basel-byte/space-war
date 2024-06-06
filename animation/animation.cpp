@@ -1,8 +1,11 @@
 #include "animation.h"
+
 #define numberOfPlanets 9
 
 Model spacecraftobj;
 EnemyManager enemyManager;
+MissileManager missileManager;
+
 float planetRotations[numberOfPlanets] = {0};
 static float rotationSpeed[numberOfPlanets] = {0, 4, 1.5, 1, 0.7,
                                                0.3, 0.2, 0.08, 0.05};
@@ -68,7 +71,7 @@ void spacecraftFirstPersonView()
     glTranslatef(0.0f, 0.0f, 20.0f);
     glTranslatef(0.0f, -45.0f, 0.0f);
     glRotatef(270, 0.0, 1.0, 0.0);
-    spacecraftobj.draw();
+    spacecraftobj.draw();    
     glPopMatrix();
 }
 
@@ -92,7 +95,7 @@ void initAnimation(float width, float height){
     screenwidth = width;
     screenheight = height;
 
-    spacecraftobj.load("../Models/shuttle/shuttle.obj");
+    spacecraftobj.load("Models/shuttle/shuttle.obj");
     enemyManager.init(10);
 }
 

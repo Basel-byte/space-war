@@ -6,8 +6,11 @@
 // #include "../spacecrafts/EnemyManager.h"
 #include "../model-loader/Model.h"
 #include "../animation/animation.h"
+#include "../animation/EffectManager.h"
+
 
 #define numberOfPlanets 9
+
 static int width = 960, height = 580;
 int selected = 0;
 // Globals.
@@ -29,11 +32,18 @@ static float planetsPositions[numberOfPlanets] = {0, -40, -50, -65, -75, -100, -
 bool isStarted = false;
 static SpaceObject *planets[9];
 GLuint skyboxTextureID; // Texture IDs for each face of the skybox
+EffectManager effectManager;
+
+void addMissile(){
+    missileManager.addMissile(xVal - 10 * sin((M_PI / 180.0) * spaceCraftAngle), 
+                              zVal - 10 * cos((M_PI / 180.0) * spaceCraftAngle),
+                              spaceCraftAngle, &effectManager);
+}
 
 void loadSkyboxTextures()
 {
     const char *skyboxFileNames =
-        "textures/space2.jpg";
+        "src/textures/space2.jpg";
 
     skyboxTextureID = SOIL_load_OGL_texture(skyboxFileNames, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
     if (skyboxTextureID == 0)
@@ -41,6 +51,7 @@ void loadSkyboxTextures()
         printf("Error loading skybox texture: %s\n", SOIL_last_result());
     }
 }
+
 void drawSkybox()
 {
 
@@ -181,6 +192,9 @@ void drawSpace()
     // Turn lights on.
     glEnable(GL_LIGHT0);
 
+    enemyManager.shootPlayer(&missileManager, xVal, zVal, &effectManager);
+    missileManager.updateMissles(); // updating missiles
+
     // Begin Large viewport.
     glViewport(0, 0, width, height);
 
@@ -206,6 +220,7 @@ void drawSpace()
                   0.0,
                   1.0,
                   0.0);
+
         glPushMatrix();
         spacecraftFirstPersonView();
         glPopMatrix();
@@ -215,7 +230,6 @@ void drawSpace()
         /*
          * Animation
          */
- 
 
         // setCamera();
  
@@ -232,7 +246,6 @@ void drawSpace()
         glPushMatrix();
         spacecraftThirdPersonView();
         glPopMatrix();
-
     }
 
     // Draw light source spheres (or arrow) after disabling lighting.
@@ -252,6 +265,14 @@ void drawSpace()
 
         glPopMatrix();
     }
+    glPushMatrix();
+    missileManager.drawMissles();
+    effectManager.updateAndDrawEffects();
+    glPopMatrix();
+
+    glPushMatrix();
+
+    glPopMatrix();
 
     glPushMatrix();
     enemyManager.draw();
@@ -293,7 +314,12 @@ void drawSpace()
     drawSmallPortSpaceCraft(spaceCraftAngle, xVal, zVal);
 
     glPushMatrix();
+    missileManager.drawMissles();
+    glPopMatrix();
+
+    glPushMatrix();
     enemyManager.draw();
+    effectManager.updateAndDrawEffects();
     glPopMatrix();
 
     // End Small viewport.
