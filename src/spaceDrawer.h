@@ -1,15 +1,19 @@
+#ifndef SPACE_DRAWER_H
+#define SPACE_DRAWER_H
+
 #include <cmath>
 
 #include <SOIL/SOIL.h>
 #include "SpaceObject.h"
 
 // #include "../spacecrafts/EnemyManager.h"
+#include "parameters.h"
 #include "../model-loader/Model.h"
 #include "../animation/animation.h"
 #include "../health-bar/PlayerHealthBar.h"
 
 #define numberOfPlanets 9
-static int width = 960, height = 580;
+
 int selected = 0;
 // Globals.
 static float xAngle = 0.0, yAngle = 0.0, zAngle = 0.0; // Angles to rotate scene.
@@ -171,43 +175,21 @@ void drawSpace()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // First Viewport for Health Bar and Rectangle
-    glViewport(width / 2, height - 30, 200, 10);
-    // playerHealthBar.renderHealthBar();
-
-    // glMatrixMode(GL_PROJECTION);
-    // glLoadIdentity();
-    // glOrtho(0, 1, 0, 1, -1, 1); // Set up orthographic projection based on the viewport size
-    // glMatrixMode(GL_MODELVIEW);
-    // glLoadIdentity();
-
-    // glColor3f(1.0f, 0.0f, 0.0f); // Set the color to red
-
-    // glBegin(GL_QUADS);
-    // glVertex2f(10.0f, 2.0f); // Bottom-left
-    // glVertex2f(90.0f, 2.0f); // Bottom-right
-    // glVertex2f(90.0f, 8.0f); // Top-right
-    // glVertex2f(10.0f, 8.0f); // Top-left
-    // glEnd();
+    // Begin Large viewport.
+    glViewport(0, 0, width, height);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, 200, 0, 10, -1, 1); // Set up orthographic projection based on the viewport size
+    glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
+
+    // Set up modelview matrix
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glColor3f(1.0f, 0.0f, 0.0f); // Set the color to red
+    playerHealthBar.renderHealthBar();
 
-    glBegin(GL_QUADS);
-    glVertex2f(0.0f, 0.0f);    // Bottom-left
-    glVertex2f(200.0f, 0.0f);  // Bottom-right
-    glVertex2f(200.0f, 10.0f); // Top-right
-    glVertex2f(0.0f, 10.0f);   // Top-left
-    glEnd();
-
-    // Begin Large viewport.
-    glViewport(0, 0, width, height);
     // Set up the modelview matrix
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // Draw the skybox
@@ -338,3 +320,5 @@ void drawSpace()
 
     glutSwapBuffers();
 }
+
+#endif

@@ -6,6 +6,7 @@
 #include <ctime>
 
 #include "../model-loader/Model.h"  
+#include "../health-bar/HealthBar.h"
 
 class EnemyManager {
 public:

@@ -39,6 +39,9 @@ void EnemyManager::init(int numOfEnemies)
 void EnemyManager::draw()
 {
 
+    ///////// uses one healthbar for all enemies as a demo until each enemy has its own bar
+    HealthBar bar(0.0, 0.0, 0.0, 100.0, 10.0);
+
     for (int i = 0; i < enemyModels.size(); ++i)
     {
 
@@ -48,8 +51,11 @@ void EnemyManager::draw()
         glTranslatef(0.0f, -3.0f, 0.0f);
         glScalef(0.1f, 0.1f, 0.1f);
         enemyModels[i].draw();
-        glTranslatef(0.0, 1.0, 0.0);
-        // draw health bar
+
+        glPushMatrix();
+        glTranslatef(0.0, 45.0, 0.0);
+        bar.renderHealthBar();
+        glPopMatrix();
         glPopMatrix();
     }
 }

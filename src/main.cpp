@@ -2,8 +2,8 @@
 #include "SpaceObject.h"
 #include "menu.h"
 // 37 5 87.5
+
 #include "spaceDrawer.h"
-// #include "../health-bar/PlayerHealthBar.h"
 
 bool survivalMode = true; // true -> survival mode / false -> normal mode
 
@@ -195,7 +195,7 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(960, 580);
+    glutInitWindowSize(width, height);
     glutCreateWindow("Space War");
     init(); // Initialize OpenGL settings
 

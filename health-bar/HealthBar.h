@@ -4,6 +4,8 @@
 #include <GL/freeglut.h>
 #include <GL/glext.h>
 
+#include "parameters.h"
+
 class HealthBar {
 private:
     // Variables to track health
@@ -15,6 +17,7 @@ private:
     float healthTop;
     float healthBottom;
     float pos_z;
+    
 public:
     int reRenderTime;
     HealthBar();
