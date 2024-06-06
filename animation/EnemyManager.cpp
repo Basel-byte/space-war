@@ -48,6 +48,8 @@ void EnemyManager::draw()
         glTranslatef(0.0f, -3.0f, 0.0f);
         glScalef(0.1f, 0.1f, 0.1f);
         enemyModels[i].draw();
+        glTranslatef(0.0, 1.0, 0.0);
+        // draw health bar
         glPopMatrix();
     }
 }

@@ -6,6 +6,7 @@
 // #include "../spacecrafts/EnemyManager.h"
 #include "../model-loader/Model.h"
 #include "../animation/animation.h"
+#include "../health-bar/PlayerHealthBar.h"
 
 #define numberOfPlanets 9
 static int width = 960, height = 580;
@@ -169,6 +170,43 @@ void drawSpace()
 {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // First Viewport for Health Bar and Rectangle
+    glViewport(width / 2, height - 30, 200, 10);
+    // playerHealthBar.renderHealthBar();
+
+    // glMatrixMode(GL_PROJECTION);
+    // glLoadIdentity();
+    // glOrtho(0, 1, 0, 1, -1, 1); // Set up orthographic projection based on the viewport size
+    // glMatrixMode(GL_MODELVIEW);
+    // glLoadIdentity();
+
+    // glColor3f(1.0f, 0.0f, 0.0f); // Set the color to red
+
+    // glBegin(GL_QUADS);
+    // glVertex2f(10.0f, 2.0f); // Bottom-left
+    // glVertex2f(90.0f, 2.0f); // Bottom-right
+    // glVertex2f(90.0f, 8.0f); // Top-right
+    // glVertex2f(10.0f, 8.0f); // Top-left
+    // glEnd();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, 200, 0, 10, -1, 1); // Set up orthographic projection based on the viewport size
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glColor3f(1.0f, 0.0f, 0.0f); // Set the color to red
+
+    glBegin(GL_QUADS);
+    glVertex2f(0.0f, 0.0f);    // Bottom-left
+    glVertex2f(200.0f, 0.0f);  // Bottom-right
+    glVertex2f(200.0f, 10.0f); // Top-right
+    glVertex2f(0.0f, 10.0f);   // Top-left
+    glEnd();
+
+    // Begin Large viewport.
+    glViewport(0, 0, width, height);
     // Set up the modelview matrix
     glLoadIdentity();
 
@@ -181,10 +219,13 @@ void drawSpace()
     // Turn lights on.
     glEnable(GL_LIGHT0);
 
-    // Begin Large viewport.
-    glViewport(0, 0, width, height);
-
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+    gluPerspective(90.0, ((double)800) / ((double)600), 0.1, 9000.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0);
 
     // Draw a vertical line on the left of the viewport to separate the two viewports
@@ -259,9 +300,6 @@ void drawSpace()
     if(mode == thirdPersonView ){
         glPopMatrix();
     }
-
-
-
 
     // End Large viewport.
 

@@ -64,14 +64,16 @@ void HealthBar::renderHealthBar()
     float currentHealthBarWidth = healthPercentage * healthBarWidth;
     float currentHealthRight = healthLeft + currentHealthBarWidth;
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
 
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+    // glClearColor(1.0, 1.0, 1.0, 1.0);
 
+    // glMatrixMode(GL_PROJECTION);
+    // glLoadIdentity();
+    // gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
     // Set up modelview matrix
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -80,19 +82,22 @@ void HealthBar::renderHealthBar()
     glBegin(GL_QUADS);
     glColor3f(1.0f, 0.7529f, 0.7961f); // Pink color for the background
     glVertex3f(healthLeft, healthTop, pos_z);
-    glVertex3f(healthRight + 0.5, healthTop, pos_z);
-    glVertex3f(healthRight + 0.5, healthBottom, pos_z);
+    glVertex3f(healthRight, healthTop, pos_z);
+    glVertex3f(healthRight, healthBottom, pos_z);
     glVertex3f(healthLeft, healthBottom, pos_z);
     glEnd();
 
     // Draw the health rectangle
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 0.0f, 0.0f); // Red color for the health bar
-    glVertex3f(healthLeft , healthTop, pos_z);
-    glVertex3f(currentHealthRight, healthTop, pos_z);
-    glVertex3f(currentHealthRight, healthBottom + 0.5, pos_z);
-    glVertex3f(healthLeft, healthBottom + 0.5, pos_z);
+    glColor3f(0.0f, 1.0f, 0.0f); // Red color for the health bar
+    glVertex3f(healthLeft, healthTop, pos_z + 0.1);
+    glVertex3f(currentHealthRight, healthTop, pos_z + 0.1);
+    glVertex3f(currentHealthRight, healthBottom, pos_z + 0.1);
+    glVertex3f(healthLeft, healthBottom, pos_z);
     glEnd();
 
     glutSwapBuffers();
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
 }
