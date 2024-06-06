@@ -53,9 +53,6 @@ void HealthBar::changeHealth(int time)
     // Update health
     float changePercentage = -decayRate * time / 1000.0;
     changeHealth(changePercentage);
-
-    // Call updateHealth again after 10 milliseconds
-    // glutTimerFunc(time, changeHealth, time);
 }
 
 void HealthBar::renderHealthBar()

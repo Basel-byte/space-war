@@ -279,6 +279,14 @@ void drawSpace()
     glPushMatrix();
     enemyManager.draw();
     glPopMatrix();
+
+    ///////////////// sample drawing of pickable objects ///////////////////////
+    SpaceObject healthKit(" ", 50.0, 0.0, 30.0, 1.0, 0, "textures/solid_red.jpeg");
+    healthKit.draw();
+
+    SpaceObject weaponUpgrader(" ", 100.0, 0.0, 30.0, 1.0, 0, "textures/green.png");
+    weaponUpgrader.draw();
+
     if(mode == thirdPersonView ){
         glPopMatrix();
     }
