@@ -2,14 +2,14 @@
 
 #include <cmath>
 
-const int initialSpeed = 1;
+const int initialSpeed = 5;
 const int fullLife = 100;
-const int acceleration = 1; // was 2
+const int acceleration = 0; // was 2
 const int missileClock = 1;
 
 void MissileManager :: addMissile(float initialX, float initialZ, float angle, EffectManager* effectManager){
     Missile missile;
-    Model missileModel;
+    Model missileModel(0.5);
     missileModel.load("Models/missile/missile.obj");
     
     missileModel.tx = initialX;
@@ -34,7 +34,7 @@ void MissileManager :: addMissile(float initialX, float initialZ, float angle, E
 
 void MissileManager :: addMissile(float initialX, float initialZ, float destX, float destZ, EffectManager* effectManager){
     Missile missile;
-    Model missileModel;
+    Model missileModel(0.5);
     missileModel.load("Models/missile/missile.obj");
     
     missileModel.tx = initialX;
@@ -72,7 +72,7 @@ void MissileManager :: updateMissles(){
         }
         else it = ++it;
     }
-    cout << "Size: "<< missiles.size() << endl;
+    // cout << "Size: "<< missiles.size() << endl;
 }
 
 void MissileManager :: drawMissles() {
@@ -91,7 +91,9 @@ void MissileManager :: drawMissles() {
             glRotatef(missile.missileModel.ry, 0, 1, 0);
             missile.missileModel.draw();
         }
+        missile.missileModel.setCollisionCenterAsCurrent();
         glPopMatrix();
+        missile.missileModel.drawCollisionMock();
 
         // rocket.obj
         // glTranslatef(x, 0, z);

@@ -1,6 +1,10 @@
 #include "Model.h"
 #include <SOIL/SOIL.h>
 
+Model::Model(double collisionRadius){
+    colRadius = collisionRadius;
+}
+
 int Model::count_char(std::string &str, char ch)
 {
     int c = 0;
@@ -342,6 +346,35 @@ void Model::load(const char *filename)
     printf("Faces: %d\n", faces.size());
     printf("Materials: %d\n", materials.size());
 
+    // compute the difference between min and max of x, y, z
+    int i = 0;
+    float min_x = vertices[i][0], max_x = vertices[i][0];
+    float min_y = vertices[i][1], max_y = vertices[i][1];
+    float min_z = vertices[i][2], max_z = vertices[i][2];
+    for (i = 1; i < vertices.size(); i++)
+    {
+        if (vertices[i][0] < min_x)
+            min_x = vertices[i][0];
+        if (vertices[i][0] > max_x)
+            max_x = vertices[i][0];
+        if (vertices[i][1] < min_y)
+            min_y = vertices[i][1];
+        if (vertices[i][1] > max_y)
+            max_y = vertices[i][1];
+        if (vertices[i][2] < min_z)
+            min_z = vertices[i][2];
+        if (vertices[i][2] > max_z)
+            max_z = vertices[i][2];
+    }
+
+    float size_x = max_x - min_x;
+    float size_y = max_y - min_y;
+    float size_z = max_z - min_z;
+
+    printf("Size_X: %f\n", size_x);
+    printf("Size_Y: %f\n", size_y);
+    printf("Size_Z: %f\n", size_z);
+
     sum_x /= vertices.size();
     sum_y /= vertices.size();
     sum_z /= vertices.size();
@@ -364,11 +397,32 @@ void Model::draw() {
     // glPushMatrix();
     //     glTranslatef(tx, 0.0f, 0.0f);
         glCallList(list); 
+        setCollisionCenterAsCurrent();
     // glPopMatrix();
 }
 
 bool Model::checkCollision(Model another) {
     return true;
+}
+
+void Model::collide() {
+    printf("Model Collide\n");
+}
+
+void Model::collideWith(Collisional* another) {
+    printf("Model Collide With\n");
+}
+
+void Model::drawCollisionMock(){
+    // Draw a mock for the collision detection
+        glPushMatrix();
+        glLoadIdentity();
+        glTranslatef(colCenterX, colCenterY, colCenterZ);
+        glColor3f(1.0, 0.0, 0.0);
+        glutWireSphere(colRadius, 20, 20);
+        glPopMatrix();
+        glDisable(GL_BLEND);
+        // cout << "Planet " << name << "(" << colCenterX << ", " << colCenterY << ", " << colCenterZ << ")" << endl;
 }
 
 // Model::~Model()

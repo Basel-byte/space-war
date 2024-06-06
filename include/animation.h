@@ -4,7 +4,7 @@
 #include <GL/glut.h>
 #include <vector>
 #include "EnemyManager.h"
-#include "../model-loader/Model.h"
+#include "Model.h"
 
 extern Model spacecraftobj;
 extern EnemyManager enemyManager;

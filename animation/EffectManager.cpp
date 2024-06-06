@@ -1,7 +1,7 @@
 #include "EffectManager.h"
-#include "visual-effects/ShootEffect.h"
-#include "visual-effects/CollisionEffect.h"
-#include "visual-effects/VisualEffect.h"
+#include "ShootEffect.h"
+#include "CollisionEffect.h"
+#include "VisualEffect.h"
 
 void EffectManager::addShootingEffect(float src_x, float src_y, float src_z, float dest_x, float dest_y, float dest_z) {
     effects.push_back(new ShootEffect(src_x, src_y, src_z, dest_x, dest_y, dest_z));

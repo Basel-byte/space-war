@@ -1,9 +1,11 @@
+#define _USE_MATH_DEFINES
+
 #include <cmath>
 #include "SpaceObject.h"
 #include "menu.h"
 // 37 5 87.5
 #include "spaceDrawer.h"
-#include "../animation/animation.h"
+#include "animation.h"
 
 void display()
 {

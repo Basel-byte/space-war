@@ -14,13 +14,14 @@
 
 #include "Face.h"
 #include "Material.h"
+#include "Collisional.h"
 
 #define WIDTH 600
 #define HEIGHT 600
 
 #define INTERVAL 2
 
-class Model {
+class Model: public CollisionalSphere {
 private:
     std::string prefix;
     std::vector<Material> materials;
@@ -46,13 +47,17 @@ private:
     void add_face_4vtn(std::string &line);
 
 public:
+    Model(double collisionRadius);
     float pos_x, pos_y, pos_z;
     float tx, ty, tz;
     float rx, ry, rz;
 
     void load(const char *filename);
     void draw();
+    void drawCollisionMock();
     bool checkCollision(Model another);
+    void collide() override;
+    void collideWith(Collisional* another) override;
     // ~Model();
 };
 

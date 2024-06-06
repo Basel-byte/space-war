@@ -2,7 +2,7 @@
 
 #define numberOfPlanets 9
 
-Model spacecraftobj;
+Model spacecraftobj = Model(0.06);
 EnemyManager enemyManager;
 MissileManager missileManager;
 
@@ -36,12 +36,12 @@ void timer(int value)
         }
         if (enemyManager.forward)
         {
-            enemyManager.enemyModels[i].ry += 1;
+            enemyManager.enemyModels[i].ry += 0.1;
             enemyManager.moveCounter++;
         }
         else
         {
-            enemyManager.enemyModels[i].ry -= 1;
+            enemyManager.enemyModels[i].ry -= 0.1;
             enemyManager.moveCounter--;
         }
     }
@@ -59,7 +59,9 @@ void spacecraftThirdPersonView(){
     glTranslatef(0.0f, -45.0f, 0.0f);
     glRotatef(270, 0.0, 1.0, 0.0);
     spacecraftobj.draw();
+    spacecraftobj.setCollisionCenterAsCurrent();
     glPopMatrix();
+    spacecraftobj.drawCollisionMock();
 }
 
 void spacecraftFirstPersonView()
@@ -71,8 +73,10 @@ void spacecraftFirstPersonView()
     glTranslatef(0.0f, 0.0f, 20.0f);
     glTranslatef(0.0f, -45.0f, 0.0f);
     glRotatef(270, 0.0, 1.0, 0.0);
-    spacecraftobj.draw();    
+    spacecraftobj.draw();
+    spacecraftobj.setCollisionCenterAsCurrent();
     glPopMatrix();
+    spacecraftobj.drawCollisionMock();
 }
 
 void drawSmallPortSpaceCraft(float spaceCraftAngle, float xVal, float zVal)

@@ -31,6 +31,7 @@ SpaceObject::SpaceObject(std::string planetId, float x, float y, float z, float 
     currentY = y;
     currentZ = z;
     radius = r;
+    colRadius = r;
     angle = a;
     textureID = SOIL_load_OGL_texture(fileName.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
     if (textureID == 0)
@@ -90,13 +91,14 @@ void SpaceObject::draw()
 
         drawSubRoutine();
         GLUquadric *quad;
-        float lightAmb[] = {0.0, 0.0, 0.0, 1.0};
-        float lightDifAndSpec0[] = {0.94, 0.72, 0.02, 1.0};
-        float lightPos0[] = {1.0, 1.0, 1.0, 1}; // Demo: last value p define whether it is direction or positional
-        float globAmb[] = {.9, .9, .9, 1.0};
+        // float lightAmb[] = {0.0, 0.0, 0.0, 1.0};
+        // float globAmb[] = {.9, .9, .9, 1.0};
 
         if (name == "sun")
         {
+            float lightDifAndSpec0[] = {0.94, 0.72, 0.02, 1.0};
+            float lightPos0[] = {1.0, 1.0, 1.0, 1}; // Demo: last value p define whether it is direction or positional
+
             // Draw light source spheres (or arrow) after disabling lighting.
             glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
             glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDifAndSpec0);
@@ -154,6 +156,9 @@ void SpaceObject::draw()
             glMaterialfv(GL_FRONT, GL_DIFFUSE, ringColor3);
             glutSolidTorus(2, 16, 75, 75);
         }
+        
+        setCollisionCenterAsCurrent();
+        
         glPopMatrix();
     }
 }
@@ -191,4 +196,25 @@ float SpaceObject::getCurrentY() const
 float SpaceObject::getCurrentZ() const
 {
     return currentZ;
+}
+
+// void SpaceObject::drawCollisionMock(){
+//     // Draw a mock for the collision detection
+//         glPushMatrix();
+//         glLoadIdentity();
+//         glTranslatef(colCenterX, colCenterY, colCenterZ);
+//         glColor3f(1.0, 0.0, 0.0);
+//         glutWireSphere(colRadius, 20, 20);
+//         glPopMatrix();
+//         // cout << "Planet " << name << "(" << colCenterX << ", " << colCenterY << ", " << colCenterZ << ")" << endl;
+// }
+
+void SpaceObject::collideWith(Collisional *other)
+{
+    cout << "Colliding with " << other << endl;
+}
+
+void SpaceObject::collide()
+{
+    cout << "Colliding" << endl;
 }

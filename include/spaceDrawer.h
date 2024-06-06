@@ -4,9 +4,9 @@
 #include "SpaceObject.h"
 
 // #include "../spacecrafts/EnemyManager.h"
-#include "../model-loader/Model.h"
-#include "../animation/animation.h"
-#include "../animation/EffectManager.h"
+#include "Model.h"
+#include "animation.h"
+#include "EffectManager.h"
 
 
 #define numberOfPlanets 9
@@ -145,7 +145,7 @@ void drawSkybox()
     // Restore previous state
     glPopMatrix();
     glEnable(GL_LIGHTING);
-    cout << "draw skybox" << endl;
+    // cout << "draw skybox" << endl;
 }
 
 // Set up camera for third-person view
@@ -262,8 +262,10 @@ void drawSpace()
         glRotatef(planetRotations[i], 0.0, 1.0, 0.0); // Rotate around the y-axis
         // Translate to the position of the planet and draw it
         (*planets[i]).draw();
-
         glPopMatrix();
+        (*planets[i]).drawCollisionMock();
+
+        
     }
     glPushMatrix();
     missileManager.drawMissles();
@@ -290,6 +292,31 @@ void drawSpace()
     glScissor(2 * width / 3 - 10, 10, width / 3, height / 3);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_SCISSOR_TEST);
+
+    // // New small viewport for the red rectangle
+    // glEnable(GL_SCISSOR_TEST);
+    // int rectWidth = width-width/10;
+    // int rectHeight = 20;
+    // int rectX = (width - rectWidth) / 2; // Center horizontally
+    // int rectY = height - rectHeight - 10; // 10 pixels from the top
+
+    // glScissor(rectX, rectY, rectWidth, rectHeight);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // glViewport(rectX, rectY, rectWidth, rectHeight);
+    // glLoadIdentity();
+
+    // // Draw the red rectangle
+    // glDisable(GL_LIGHTING);
+    // glBegin(GL_QUADS);
+    // glColor3f(1.0, 0.0, 0.0); // Red color
+    // glVertex2f(0.0, 0.0);
+    // glVertex2f(1.0, 0.0);
+    // glVertex2f(1.0, 1.0);
+    // glVertex2f(0.0, 1.0);
+    // glEnd();
+
+    // glDisable(GL_SCISSOR_TEST);
 
     // Begin Small viewport.
     glViewport(2 * width / 3 - 10, 10, width / 3, height / 3);

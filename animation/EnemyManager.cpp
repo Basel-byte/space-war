@@ -22,7 +22,7 @@ void EnemyManager::init(int numOfEnemies)
     float enemiesPositions[] = {-90, -120, -140, -180};
     for (int i = 0; i < numOfEnemies; i++)
     {
-        Model enemyModel1;
+        Model enemyModel1(0.5);
         enemyModel1.load("Models/flying-saucer/Low_poly_UFO.obj");
 
         int randomIndex;
@@ -51,7 +51,9 @@ void EnemyManager::draw(){
         glTranslatef(0.0f, -3.0f, 0.0f);
         glScalef(0.1f, 0.1f, 0.1f);
         enemyModels[i].draw();
+        enemyModels[i].setCollisionCenterAsCurrent();
         glPopMatrix();
+        enemyModels[i].drawCollisionMock();
     }
 }
 

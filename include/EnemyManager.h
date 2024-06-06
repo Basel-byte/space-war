@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "../model-loader/Model.h"
+#include "Model.h"
 #include "MissileManager.h"
 #include "EffectManager.h"
 
