@@ -5,7 +5,9 @@ enum CollisionType {
     PLAYER,
     ENEMY,
     PLANET,
-    MISSILE
+    MISSILE,
+    HEALTH_PICKABLE,
+    MISSILE_PICKABLE
 };
 
 std::string generateRandomString();

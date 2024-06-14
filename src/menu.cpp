@@ -50,7 +50,7 @@ void Menu::drawMenu(int selected)
                                                            // Draw text for menu options
                                                            // Black color for text
         glColor3f(1.0f, 1.0f, 1.0f);
-        drawString(165.0f, 100.0f, 6.0f, "Option 1"); // Adjusted text position
+        drawString(165.0f, 100.0f, 6.0f, "Exit"); // Adjusted text position
     }
     else if (selected == 1)
     {
@@ -60,7 +60,7 @@ void Menu::drawMenu(int selected)
                                                             // Draw text for menu options
                                                             // Black color for text
         glColor3f(1.0f, 1.0f, 1.0f);
-        drawString(165.0f, 200.0f, 6.0f, "Option 2"); // Adjusted text position
+        drawString(165.0f, 200.0f, 6.0f, "Time Mode"); // Adjusted text position
     }
     else if (selected == 2)
     {
@@ -70,14 +70,14 @@ void Menu::drawMenu(int selected)
                                                             // Draw text for menu options
                                                             // Black color for text
         glColor3f(1.0f, 1.0f, 1.0f);
-        drawString(165.0f, 300.0f, 6.0f, "Option 3"); // Adjusted text position
+        drawString(165.0f, 300.0f, 6.0f, "Survival Mode"); // Adjusted text position
     }
     glColor3f(0.0f, 0.0f, 0.0f);
-    drawString(165.0f, 100.0f, 6.0f, "Option 1"); // Adjusted text position
+    drawString(165.0f, 100.0f, 6.0f, "Exit"); // Adjusted text position
     glColor3f(0.0f, 0.0f, 0.0f);
-    drawString(165.0f, 200.0f, 6.0f, "Option 2"); // Adjusted text position
+    drawString(165.0f, 200.0f, 6.0f, "Time Mode"); // Adjusted text position
     glColor3f(0.0f, 0.0f, 0.0f);
-    drawString(165.0f, 300.0f, 6.0f, "Option 3"); // Adjusted text position
+    drawString(165.0f, 300.0f, 6.0f, "Survival Mode"); // Adjusted text position
 
     // Draw lines between the text
     glColor3f(1.0f, 1.0f, 0.0f); // Black color for lines

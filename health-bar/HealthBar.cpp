@@ -1,5 +1,7 @@
 #include "HealthBar.h"
+#include "PlayerHealthBar.h"
 
+HealthBar playerHealthBar = HealthBar();
 
 HealthBar::HealthBar() {
     healthPercentage = 1.0f; // Health starts at 100%
@@ -9,9 +11,10 @@ HealthBar::HealthBar() {
     healthRight = healthLeft + healthBarWidth;
     healthTop = 0.97f;
     healthBottom = 0.95f;
-    reRenderTime = 10; // 10 milliseconds
+    reRenderTime = 100; // 10 milliseconds
     pos_z = 0;
 }
+
 HealthBar::HealthBar(float x, float y, float z, float w, float h) {
     healthPercentage = 1.0f; 
     decayRate = 0.01f;      
@@ -93,4 +96,14 @@ void HealthBar::renderHealthBar()
     glEnable(GL_LIGHTING);
     // Restore the previous OpenGL state
     glPopAttrib();
+}
+
+void startBarDecay(int time)
+{
+    playerHealthBar.changeHealth(time);
+    glutTimerFunc(time, startBarDecay, time);
+}
+
+void startBarDecay() {
+    glutTimerFunc(playerHealthBar.reRenderTime, startBarDecay, playerHealthBar.reRenderTime);
 }

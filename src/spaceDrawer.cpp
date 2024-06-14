@@ -2,7 +2,7 @@
 #include "PlayerHealthBar.h"
 
 int width = 960, height = 580; // Width and height of the viewport.
-int selected = 0;
+int selected = 2;
 // Globals.
 float xAngle = 0.0, yAngle = 0.0, zAngle = 0.0; // Angles to rotate scene.
 
@@ -23,6 +23,8 @@ bool isStarted = false;
 GLuint skyboxTextureID; // Texture IDs for each face of the skybox
 EffectManager effectManager;
 
+std::vector<SpaceObject> healthPickable;
+std::vector<SpaceObject> weaponPickable;
 
 void addMissile(){
     missileManager.addMissile(xVal - 10 * sin((M_PI / 180.0) * spaceCraftAngle), 
@@ -297,11 +299,22 @@ void drawSpace()
     glPopMatrix();
 
     ///////////////// sample drawing of pickable objects ///////////////////////
-    SpaceObject healthKit(" ", 50.0, 0.0, 30.0, 1.0, 0, "src/textures/solid_red.jpeg");
-    healthKit.draw();
+    // SpaceObject healthKit(" ", 50.0, 0.0, 30.0, 1.0, 0, "src/textures/solid_red.jpeg");
+    // healthKit.draw();
 
-    SpaceObject weaponUpgrader(" ", 100.0, 0.0, 30.0, 1.0, 0, "src/textures/green.png");
-    weaponUpgrader.draw();
+    // SpaceObject weaponUpgrader(" ", 100.0, 0.0, 30.0, 1.0, 0, "src/textures/green.png");
+    // weaponUpgrader.draw();
+
+    // draw the pickable objects
+    for (auto& obj : healthPickable)
+    {
+        obj.draw();
+    }
+
+    for (auto& obj : weaponPickable)
+    {
+        obj.draw();
+    }
 
     if(mode == thirdPersonView ){
         glPopMatrix();

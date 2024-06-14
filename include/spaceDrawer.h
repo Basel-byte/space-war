@@ -29,6 +29,9 @@ extern bool isStarted;
 extern GLuint skyboxTextureID; // Texture IDs for each face of the skybox
 extern EffectManager effectManager;
 
+extern std::vector<SpaceObject> healthPickable;
+extern std::vector<SpaceObject> weaponPickable;
+
 void addMissile();
 
 void loadSkyboxTextures();
