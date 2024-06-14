@@ -267,8 +267,6 @@ int main(int argc, char **argv)
     glEnable(GL_DEPTH_TEST);
     init(); // Initialize OpenGL settings
     glutDisplayFunc(display);
-    // if (survivalMode)
-    //     startBarDecay();
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyInput);
     glutSpecialFunc(specialKeyInput);
