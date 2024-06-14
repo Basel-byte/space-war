@@ -1,9 +1,15 @@
-#include "Model.h"
+#include <GL/glew.h>
 #include <SOIL/SOIL.h>
 
-Model::Model(double collisionRadius){
-    colRadius = collisionRadius;
-}
+#include "Model.h"
+#include "constants.h"
+
+// Model::Model(double collisionRadius){
+//     colRadius = collisionRadius;
+//     colCenterX = 0.0f;
+//     colCenterY = 0.0f;
+//     colCenterZ = 0.0f;
+// }
 
 int Model::count_char(std::string &str, char ch)
 {
@@ -70,15 +76,15 @@ void Model::load_material(const char *filename)
         {
             switch (line[1])
             {
-                case 'a':
-                    sscanf(line.c_str(), "Ka %f %f %f", &a[0], &a[1], &a[2]);
-                    break;
-                case 'd':
-                    sscanf(line.c_str(), "Kd %f %f %f", &d[0], &d[1], &d[2]);
-                    break;
-                case 's':
-                    sscanf(line.c_str(), "Ks %f %f %f", &s[0], &s[1], &s[2]);
-                    break;
+            case 'a':
+                sscanf(line.c_str(), "Ka %f %f %f", &a[0], &a[1], &a[2]);
+                break;
+            case 'd':
+                sscanf(line.c_str(), "Kd %f %f %f", &d[0], &d[1], &d[2]);
+                break;
+            case 's':
+                sscanf(line.c_str(), "Ks %f %f %f", &s[0], &s[1], &s[2]);
+                break;
             }
         }
         else if (line[0] == 'm' && line[1] == 'a')
@@ -94,7 +100,8 @@ void Model::load_material(const char *filename)
             if (!img)
             {
                 std::cout << "Failed to load texture" << std::endl;
-                exit(-1);
+                cout << "file name " << filename << endl;
+                // exit(-1);
             }
 
             glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -105,7 +112,8 @@ void Model::load_material(const char *filename)
             else if (nrChannels == 4)
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
 
-            SOIL_free_image_data(img);        }
+            SOIL_free_image_data(img);
+        }
     }
 }
 
@@ -391,38 +399,15 @@ void Model::load(const char *filename)
     // this->~Model();
 }
 
-void Model::draw() {
+void Model::draw()
+{
     // demo to move object
     // tx += 0.1;
     // glPushMatrix();
     //     glTranslatef(tx, 0.0f, 0.0f);
-        glCallList(list); 
-        setCollisionCenterAsCurrent();
+    glCallList(list);
+    // setCollisionCenterAsCurrent();
     // glPopMatrix();
-}
-
-bool Model::checkCollision(Model another) {
-    return true;
-}
-
-void Model::collide() {
-    printf("Model Collide\n");
-}
-
-void Model::collideWith(Collisional* another) {
-    printf("Model Collide With\n");
-}
-
-void Model::drawCollisionMock(){
-    // Draw a mock for the collision detection
-        glPushMatrix();
-        glLoadIdentity();
-        glTranslatef(colCenterX, colCenterY, colCenterZ);
-        glColor3f(1.0, 0.0, 0.0);
-        glutWireSphere(colRadius, 20, 20);
-        glPopMatrix();
-        glDisable(GL_BLEND);
-        // cout << "Planet " << name << "(" << colCenterX << ", " << colCenterY << ", " << colCenterZ << ")" << endl;
 }
 
 // Model::~Model()

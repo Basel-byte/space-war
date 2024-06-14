@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "VisualEffect.h"
+
 using namespace std;
 
 struct Particle {

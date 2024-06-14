@@ -5,31 +5,24 @@
 #include <iostream>
 #include "Model.h"
 #include "EffectManager.h"
-
+#include "missile.h"
+#include "sound_service.h"
 using namespace std;
 
-struct Missile{
-    Model missileModel{0.05};
-    int speed;
-    int lifetime;
-    float transX;
-    float transZ;
-    bool isFromPlayer;
-};
-
-class MissileManager{
+class MissileManager
+{
 private:
-    vector<Missile> missiles;
     int countOfEnemyMisslles = 0;
+    SoundService soundService;
 
 public:
-
-    void addMissile(float initialX, float initialZ, float angle, EffectManager* effectManager);
-    void addMissile(float initialX, float initialZ, float destX, float destZ, EffectManager* effectManager);
+    MissileManager(SoundService soundService);
+    vector<Missile> missiles;
+    void addMissile(float initialX, float initialZ, float angle, EffectManager *effectManager);
+    void addMissile(float initialX, float initialZ, float destX, float destZ, EffectManager *effectManager);
     void updateMissles();
     void drawMissles();
     bool isAvailable();
-
 };
 
-#endif //MISSILEMANAGER_H
+#endif // MISSILEMANAGER_H

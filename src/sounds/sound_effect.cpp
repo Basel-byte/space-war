@@ -57,9 +57,10 @@ void SoundEffect::playSound()
 
     // Allocate memory for the audio data
     data = malloc(sfInfo.frames * sfInfo.channels * sizeof(short));
-
+    cout << "after malloc";
     // Read the audio data
     sf_read_short(sndFile, (short *)data, sfInfo.frames * sfInfo.channels);
+    cout << "after sf_read_short";
 
     // Determine the format based on the number of channels
     format = (sfInfo.channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
@@ -67,6 +68,7 @@ void SoundEffect::playSound()
 
     // Close the audio file
     sf_close(sndFile);
+    cout << "after sf_close";
 
     // Generate buffer and attach data
     alBufferData(buffer, format, data, size, sfInfo.samplerate);
@@ -79,6 +81,7 @@ void SoundEffect::playSound()
 
     // Free allocated memory
     free(data);
+    cout << "after free";
 }
 void SoundEffect::deleteSound()
 {

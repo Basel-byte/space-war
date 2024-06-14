@@ -2,12 +2,11 @@
 #ifndef SPACEOBJECT_H
 #define SPACEOBJECT_H
 
-#include <iostream>
 #include <GL/glew.h>
 #include <GL/freeglut_std.h>
 #include <SOIL/SOIL.h>
+#include <iostream>
 #include "Collisional.h"
-#define numberOfPlanets 9 // Number of rows of asteroids.
 using namespace std;
 
 // SpaceObject class.
@@ -17,6 +16,8 @@ public:
     SpaceObject();
 
     SpaceObject(std::string name, float x, float y, float z, float r, float a, string fileName);
+
+    std::string getName() { return name; }
 
     float getCenterX() { return centerX; }
 
@@ -29,8 +30,6 @@ public:
     float getAngle() { return angle; }
 
     void draw();
-
-    void drawSubRoutine();
 
     void setAngle(float angle);
 
@@ -46,15 +45,14 @@ public:
 
     float getCurrentZ() const;
 
-    void collideWith(Collisional* other) override;
+    void collideWith(Collisional* other, CollisionType type) override;
 
     void collide() override;
 
-    // void drawCollisionMock();
-
-private:
+protected:
     std::string name;
     float centerX, centerY, centerZ, currentX, currentY, currentZ, radius, angle;
     GLuint textureID;
+    virtual void drawSubRoutine();
 };
 #endif // COSMICSPHERE_H

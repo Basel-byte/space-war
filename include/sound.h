@@ -20,6 +20,7 @@ private:
     ALCcontext *context;
     ALuint source;
     ALuint buffer;
+    ALvoid *data;
 
 public:
     // Function to initialize OpenAL for sound
