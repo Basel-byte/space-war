@@ -202,8 +202,8 @@ void drawSpace()
     enemyManager.shootPlayer(&missileManager, xVal, zVal, &effectManager);
     missileManager.updateMissles(); // updating missiles
 
-    // Begin Large viewport.
-    glViewport(0, 0, width, height);
+    // // Begin Large viewport.
+    // glViewport(0, 0, width, height);
 
     
     glMatrixMode(GL_PROJECTION);
@@ -298,13 +298,6 @@ void drawSpace()
     enemyManager.draw();
     glPopMatrix();
 
-    ///////////////// sample drawing of pickable objects ///////////////////////
-    // SpaceObject healthKit(" ", 50.0, 0.0, 30.0, 1.0, 0, "src/textures/solid_red.jpeg");
-    // healthKit.draw();
-
-    // SpaceObject weaponUpgrader(" ", 100.0, 0.0, 30.0, 1.0, 0, "src/textures/green.png");
-    // weaponUpgrader.draw();
-
     // draw the pickable objects
     for (auto& obj : healthPickable)
     {
@@ -326,31 +319,6 @@ void drawSpace()
     glScissor(2 * width / 3 - 10, 10, width / 3, height / 3);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_SCISSOR_TEST);
-
-    // // New small viewport for the red rectangle
-    // glEnable(GL_SCISSOR_TEST);
-    // int rectWidth = width-width/10;
-    // int rectHeight = 20;
-    // int rectX = (width - rectWidth) / 2; // Center horizontally
-    // int rectY = height - rectHeight - 10; // 10 pixels from the top
-
-    // glScissor(rectX, rectY, rectWidth, rectHeight);
-    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // glViewport(rectX, rectY, rectWidth, rectHeight);
-    // glLoadIdentity();
-
-    // // Draw the red rectangle
-    // glDisable(GL_LIGHTING);
-    // glBegin(GL_QUADS);
-    // glColor3f(1.0, 0.0, 0.0); // Red color
-    // glVertex2f(0.0, 0.0);
-    // glVertex2f(1.0, 0.0);
-    // glVertex2f(1.0, 1.0);
-    // glVertex2f(0.0, 1.0);
-    // glEnd();
-
-    // glDisable(GL_SCISSOR_TEST);
 
     // Begin Small viewport.
     glViewport(2 * width / 3 - 10, 10, width / 3, height / 3);
