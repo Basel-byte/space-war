@@ -5,6 +5,7 @@
 #include "planets.h"
 #include "menu.h"
 // 37 5 87.5
+
 #include "spaceDrawer.h"
 #include "animation.h"
 #include "CollisionManager.h"
@@ -239,11 +240,13 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(960, 580);
+    glutInitWindowSize(width, height);
     glutCreateWindow("Space War");
     glEnable(GL_DEPTH_TEST);
     init(); // Initialize OpenGL settings
     glutDisplayFunc(display);
+    // if (survivalMode)
+    //     startBarDecay();
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyInput);
     glutSpecialFunc(specialKeyInput);

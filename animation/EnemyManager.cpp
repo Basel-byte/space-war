@@ -1,4 +1,5 @@
 #include "EnemyManager.h"
+#include "HealthBar.h"
 
 #include <cstdlib>
 #include <ctime>

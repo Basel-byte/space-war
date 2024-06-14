@@ -1,6 +1,7 @@
 #include "spaceDrawer.h"
+#include "PlayerHealthBar.h"
 
-int width = 960, height = 580;
+int width = 960, height = 580; // Width and height of the viewport.
 int selected = 0;
 // Globals.
 float xAngle = 0.0, yAngle = 0.0, zAngle = 0.0; // Angles to rotate scene.
@@ -169,7 +170,22 @@ void drawSpace()
 {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Begin Large viewport.
+    glViewport(0, 0, width, height);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
+
+    // Set up modelview matrix
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    playerHealthBar.renderHealthBar();
+
     // Set up the modelview matrix
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // Draw the skybox
@@ -187,7 +203,14 @@ void drawSpace()
     // Begin Large viewport.
     glViewport(0, 0, width, height);
 
+    
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+    gluPerspective(90.0, ((double)800) / ((double)600), 0.1, 9000.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0);
 
     // Draw a vertical line on the left of the viewport to separate the two viewports
@@ -272,12 +295,17 @@ void drawSpace()
     glPushMatrix();
     enemyManager.draw();
     glPopMatrix();
+
+    ///////////////// sample drawing of pickable objects ///////////////////////
+    SpaceObject healthKit(" ", 50.0, 0.0, 30.0, 1.0, 0, "src/textures/solid_red.jpeg");
+    healthKit.draw();
+
+    SpaceObject weaponUpgrader(" ", 100.0, 0.0, 30.0, 1.0, 0, "src/textures/green.png");
+    weaponUpgrader.draw();
+
     if(mode == thirdPersonView ){
         glPopMatrix();
     }
-
-
-
 
     // End Large viewport.
 
