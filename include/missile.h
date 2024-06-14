@@ -18,7 +18,7 @@ public:
     float transZ;
     float rotationY;
     bool isFromPlayer;
-
+    
     Missile(double rotationY);
     Missile(float initialX, float initialZ, float initialrZ, double rotationY);
     void draw();

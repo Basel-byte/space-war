@@ -121,7 +121,7 @@ void initAnimation(float width, float height){
     screenheight = height;
 
     spacecraftobj.model.load("Models/shuttle/shuttle.obj");
-    enemyManager.init(10);
+    enemyManager.init(5);
 }
 
 

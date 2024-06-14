@@ -270,10 +270,6 @@ void drawSpace()
     glPopMatrix();
 
     glPushMatrix();
-
-    glPopMatrix();
-
-    glPushMatrix();
     enemyManager.draw();
     glPopMatrix();
     if(mode == thirdPersonView ){

@@ -30,8 +30,6 @@ public:
     void updateMissles();
     void drawMissles();
     bool isAvailable();
-    void deleteMissile(int index);
-
 };
 
 #endif //MISSILEMANAGER_H

@@ -31,7 +31,6 @@ public:
     std::vector<Enemy> enemys;  
     std::vector<float> shuttlePositions;
     void shootPlayer(MissileManager* missileManager, int playerPosX, int playerPosZ, EffectManager* effectManager);
-    void deleteEnemy(Enemy* enemy);
 };
 
 #endif

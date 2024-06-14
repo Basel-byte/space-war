@@ -2,9 +2,9 @@
 
 #include <cmath>
 
-const int initialSpeed = 5;
-const int fullLife = 10000;
-const int acceleration = 0; // was 2
+const int initialSpeed = 1;
+const int fullLife = 100;
+const int acceleration = 1; // was 2
 const int missileClock = 1;
 
 void MissileManager :: addMissile(float initialX, float initialZ, float angle, EffectManager* effectManager){
@@ -69,8 +69,9 @@ void MissileManager :: updateMissles(){
         it->speed += acceleration;
         it->lifetime -= missileClock;
         // bool isCollided = it->model.checkCollision() /// uncomment this
-        bool isCollided = false;
-        if(isCollided || it->lifetime == 0) {
+        // bool isCollided = false;
+        if(it->isCollided || it->lifetime == 0) {
+            cout << "Deleting missile" << endl;
             if(it->isFromPlayer == false) countOfEnemyMisslles--;
             it = missiles.erase(it);
         }
@@ -109,7 +110,3 @@ void MissileManager :: drawMissles() {
 }
 
 bool MissileManager :: isAvailable() { return countOfEnemyMisslles < 1;}
-
-void MissileManager::deleteMissile(int index) {
-    missiles.erase(missiles.begin() + index);
-}

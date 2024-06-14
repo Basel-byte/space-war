@@ -19,10 +19,10 @@ EnemyManager::~EnemyManager()
 void EnemyManager::init(int numOfEnemies)
 {
     // float enemiesPositions[] = {-90, -120, -140, -180, -250, -300, -360, -410};
-    float enemiesPositions[] = {-90, -120, -140, -180};
+    float enemiesPositions[] = {-50, -90, -120, -130, -140, -160, -180, -200};
     for (int i = 0; i < numOfEnemies; i++)
     {
-        Enemy enemy;
+        Enemy enemy = Enemy();
 
         int randomIndex;
         int arrayLength = sizeof(enemiesPositions) / sizeof( enemiesPositions[0]);
@@ -39,19 +39,24 @@ void EnemyManager::init(int numOfEnemies)
     }
 }
 
-void EnemyManager::draw(){
-
-    for (int i = 0; i < enemys.size(); ++i)
-    {
-
-        glPushMatrix();
-        glRotatef(enemys[i].model.ry, 0.0, 1.0, 0.0); 
-        glTranslatef(enemys[i].model.tx , 0.0f, 0.0f);
-        glTranslatef(0.0f, -3.0f, 0.0f);
-        glScalef(0.1f, 0.1f, 0.1f);
-        enemys[i].draw();
-        glPopMatrix();
-        enemys[i].drawCollisionMock();
+void EnemyManager::draw() {
+    for (auto it = enemys.begin(); it != enemys.end();) {
+        // print the address of the current enemy and if it is collided and its id
+        // cout << "Enemy address: " << &(*it) << " isCollided: " << it->isCollided << " id: " << it->id << endl;
+        if (it->isCollided) {
+            cout << "Deleting enemy" << endl;
+            it = enemys.erase(it);
+        } else {
+            glPushMatrix();
+            glRotatef(it->model.ry, 0.0, 1.0, 0.0); 
+            glTranslatef(it->model.tx, 0.0f, 0.0f);
+            glTranslatef(0.0f, -3.0f, 0.0f);
+            glScalef(0.1f, 0.1f, 0.1f);
+            it->draw();
+            glPopMatrix();
+            it->drawCollisionMock();
+            it++;
+        }
     }
 }
 
@@ -86,14 +91,4 @@ int EnemyManager :: getQuad(float angle){
     if(angle <= 180) return 2;
     if(angle <= 270) return 3;
     return 4;
-}
-
-void EnemyManager :: deleteEnemy(Enemy* enemy){
-    for(auto it = enemys.begin(); it != enemys.end();){
-        if(&(*it) == enemy){
-            it = enemys.erase(it);
-            break;
-        }
-        else it = ++it;
-    }
 }

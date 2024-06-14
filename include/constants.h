@@ -2,7 +2,7 @@
 #include "Spacecraft.h"
 
 #define numberOfPlanets 10
-#define showCollisionMockups true
+#define showCollisionMockups false
 
 extern SpaceObject *planets[numberOfPlanets];
 extern Spacecraft spacecraftobj;

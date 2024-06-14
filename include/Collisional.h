@@ -13,6 +13,8 @@ std::string generateRandomString();
 class Collisional {
 public:
     std::string id = generateRandomString();
+    bool isCollided = false;
+    
     /// @brief The collision action when the object collides with another object
     virtual void collide() = 0;
 
