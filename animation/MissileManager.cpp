@@ -3,25 +3,27 @@
 #include <cmath>
 
 const int initialSpeed = 5;
-const int fullLife = 100;
+const int fullLife = 10000;
 const int acceleration = 0; // was 2
 const int missileClock = 1;
 
 void MissileManager :: addMissile(float initialX, float initialZ, float angle, EffectManager* effectManager){
-    Missile missile;
-    Model missileModel(0.5);
-    missileModel.load("Models/missile/missile.obj");
+    Model model;
+    model.load("Models/missile/missile.obj");
     
-    missileModel.tx = initialX;
-    missileModel.tz = initialZ;
-    missileModel.ry = angle;
+    model.tx = initialX;
+    model.tz = initialZ;
+    model.ry = angle;
 
-    //Remember: add the simple model here;
-    missile.missileModel = missileModel;
+    Missile missile = Missile(angle);
+
+    // Remember: add the simple model here;
+    missile.model = model;
 
     missile.lifetime = fullLife;
     missile.speed = initialSpeed; // this will be incremented to get the current position.
     missile.isFromPlayer = true;
+    missile.rotationY = angle;
     missiles.push_back(missile);
 
     effectManager->addShootingEffect(initialX - 3 * sin((M_PI / 180.0) * angle), 0,
@@ -33,23 +35,25 @@ void MissileManager :: addMissile(float initialX, float initialZ, float angle, E
 }
 
 void MissileManager :: addMissile(float initialX, float initialZ, float destX, float destZ, EffectManager* effectManager){
-    Missile missile;
-    Model missileModel(0.5);
-    missileModel.load("Models/missile/missile.obj");
+    Model model;
+    model.load("Models/missile/missile.obj");
     
-    missileModel.tx = initialX;
-    missileModel.tz = initialZ;
+    model.tx = initialX;
+    model.tz = initialZ;
 
     float angle = atan(((float)(destX - initialX)) / ((float)(destZ - initialZ))) * 180 / M_PI;
-    missileModel.ry = destZ - initialZ >= 0? 180 + angle : angle;
+    model.ry = destZ - initialZ >= 0? 180 + angle : angle;
+    Missile missile = Missile(angle);
+
 
     //Remember: add the simple model here;
-    missile.missileModel = missileModel;
+    missile.model = model;
 
     missile.lifetime = fullLife;
     missile.speed = initialSpeed; // this will be incremented to get the current position.
     missile.transX = destX - initialX;
     missile.transZ = destZ - initialZ;
+    missile.rotationY = model.ry;
     float magnitude = sqrt(missile.transX * missile.transX + missile.transZ * missile.transZ);
     missile.transX /= magnitude;
     missile.transZ /= magnitude;
@@ -64,7 +68,7 @@ void MissileManager :: updateMissles(){
     for (auto it = missiles.begin(); it != missiles.end();){
         it->speed += acceleration;
         it->lifetime -= missileClock;
-        // bool isCollided = it->missileModel.checkCollision() /// uncomment this
+        // bool isCollided = it->model.checkCollision() /// uncomment this
         bool isCollided = false;
         if(isCollided || it->lifetime == 0) {
             if(it->isFromPlayer == false) countOfEnemyMisslles--;
@@ -80,20 +84,20 @@ void MissileManager :: drawMissles() {
         glPushMatrix();
         if(missile.isFromPlayer){
             // missile.obj
-            glTranslatef(missile.missileModel.tx - missile.speed * sin(missile.missileModel.ry * M_PI / 180.0), 
-                        0, missile.missileModel.tz - missile.speed * cos(missile.missileModel.ry * M_PI / 180.0));
-            glRotatef(missile.missileModel.ry, 0, 1, 0);
-            missile.missileModel.draw();
+            glTranslatef(missile.model.tx - missile.speed * sin(missile.model.ry * M_PI / 180.0), 
+                        0, missile.model.tz - missile.speed * cos(missile.model.ry * M_PI / 180.0));
+            glRotatef(missile.model.ry, 0, 1, 0);
+            missile.draw();
         }
         else{
-            glTranslatef(missile.missileModel.tx + missile.speed * missile.transX, 0, 
-                         missile.missileModel.tz + missile.speed * missile.transZ);
-            glRotatef(missile.missileModel.ry, 0, 1, 0);
-            missile.missileModel.draw();
+            glTranslatef(missile.model.tx + missile.speed * missile.transX, 0, 
+                         missile.model.tz + missile.speed * missile.transZ);
+            glRotatef(missile.model.ry, 0, 1, 0);
+            missile.draw();
         }
-        missile.missileModel.setCollisionCenterAsCurrent();
+        // missile.model.setCollisionCenterAsCurrent();
         glPopMatrix();
-        missile.missileModel.drawCollisionMock();
+        missile.drawCollisionMock();
 
         // rocket.obj
         // glTranslatef(x, 0, z);
@@ -104,4 +108,8 @@ void MissileManager :: drawMissles() {
     }
 }
 
-bool MissileManager :: isAvailable() { return countOfEnemyMisslles < 3;}
+bool MissileManager :: isAvailable() { return countOfEnemyMisslles < 1;}
+
+void MissileManager::deleteMissile(int index) {
+    missiles.erase(missiles.begin() + index);
+}

@@ -1,8 +1,12 @@
 #include <math.h>
+#include <random>
+#include <string>
+#include <algorithm>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
 #include "Collisional.h"
+#include "constants.h"
 
 void Collisional::setCollisionCenterAsCurrent() {
     // Get current position of the object from the modelview matrix
@@ -33,15 +37,11 @@ bool CollisionalSphere::isCollidingWith(CollisionalSphere* other) {
 }
 
 bool CollisionalSphere::isCollidingWith(CollisionalBox* other) {
-    // Check if the sphere is inside the box
-    float dx = colCenterX - other->getColCenterX() - other->getColWidth() / 2;
-    float dy = colCenterY - other->getColCenterY() - other->getColHeight() / 2;
-    float dz = colCenterZ - other->getColCenterZ() - other->getColDepth() / 2;
-    float distance = sqrt(dx * dx + dy * dy + dz * dz);
-    return distance < colRadius;
+    return other->isCollidingWith(this);
 }
 
 void CollisionalSphere::drawCollisionMock() {
+    if(!showCollisionMockups) return;
     glPushMatrix();
     glLoadIdentity();
     glTranslatef(colCenterX, colCenterY, colCenterZ);
@@ -61,62 +61,223 @@ void CollisionalSphere::drawCollisionMock() {
 //     }
 // }
 
+CollisionalBox::CollisionalBox(double width, double height, double depth, double ry) {
+    colWidth = width;
+    colHeight = height;
+    colDepth = depth;
+    colRotationY = ry;
+}
+
+
+
 bool CollisionalBox::isCollidingWith(CollisionalSphere* other) {
-    // Check if the sphere is inside the box
-    float dx = other->getColCenterX() - colCenterX - colWidth / 2;
-    float dy = other->getColCenterY() - colCenterY - colHeight / 2;
-    float dz = other->getColCenterZ() - colCenterZ - colDepth / 2;
-    float distance = sqrt(dx * dx + dy * dy + dz * dz);
+    // rotate the vertices of the current box
+    float halfWidth = colWidth / 2.0f;
+    float halfHeight = colHeight / 2.0f;
+    float halfDepth = colDepth / 2.0f;
+
+    float vertices[8][3] = {
+        {-halfWidth, -halfHeight, -halfDepth},
+        {halfWidth, -halfHeight, -halfDepth},
+        {halfWidth, halfHeight, -halfDepth},
+        {-halfWidth, halfHeight, -halfDepth},
+        {-halfWidth, -halfHeight, halfDepth},
+        {halfWidth, -halfHeight, halfDepth},
+        {halfWidth, halfHeight, halfDepth},
+        {-halfWidth, halfHeight, halfDepth}
+    };
+
+    for (int i = 0; i < 8; i++) {
+        rotateY(vertices[i], colRotationY);
+    }
+
+    // Calculate min and max values for each axis
+    float minX = vertices[0][0], minY = vertices[0][1], minZ = vertices[0][2];
+    float maxX = vertices[0][0], maxY = vertices[0][1], maxZ = vertices[0][2];
+    for (int i = 0; i < 8; i++) {
+        if (vertices[i][0] < minX) minX = vertices[i][0];
+        if (vertices[i][0] > maxX) maxX = vertices[i][0];
+        if (vertices[i][1] < minY) minY = vertices[i][1];
+        if (vertices[i][1] > maxY) maxY = vertices[i][1];
+        if (vertices[i][2] < minZ) minZ = vertices[i][2];
+        if (vertices[i][2] > maxZ) maxZ = vertices[i][2];
+    }
+
+    minX += colCenterX;
+    maxX += colCenterX;
+    minY += colCenterY;
+    maxY += colCenterY;
+    minZ += colCenterZ;
+    maxZ += colCenterZ;
+
+    float x = max(minX, min(maxX, other->getColCenterX()));
+    float y = max(minY, min(maxY, other->getColCenterY()));
+    float z = max(minZ, min(maxZ, other->getColCenterZ()));
+
+    float distance = sqrt((x - other->getColCenterX()) * (x - other->getColCenterX()) +
+                         (y - other->getColCenterY()) * (y - other->getColCenterY()) +
+                         (z - other->getColCenterZ()) * (z - other->getColCenterZ()));
+
     return distance < other->getColRadius();
 }
 
 bool CollisionalBox::isCollidingWith(CollisionalBox* other) {
+    // rotate the vertices of the current box
+    float halfWidth = colWidth / 2.0f;
+    float halfHeight = colHeight / 2.0f;
+    float halfDepth = colDepth / 2.0f;
+
+    float vertices[8][3] = {
+        {-halfWidth, -halfHeight, -halfDepth},
+        {halfWidth, -halfHeight, -halfDepth},
+        {halfWidth, halfHeight, -halfDepth},
+        {-halfWidth, halfHeight, -halfDepth},
+        {-halfWidth, -halfHeight, halfDepth},
+        {halfWidth, -halfHeight, halfDepth},
+        {halfWidth, halfHeight, halfDepth},
+        {-halfWidth, halfHeight, halfDepth}
+    };
+
+    for (int i = 0; i < 8; i++) {
+        rotateY(vertices[i], colRotationY);
+    }
+
+    // rotate the vertices of the other box
+    halfWidth = other->getColWidth() / 2.0f;
+    halfHeight = other->getColHeight() / 2.0f;
+    halfDepth = other->getColDepth() / 2.0f;
+    float otherVertices[8][3] = {
+        {-halfWidth, -halfHeight, -halfDepth},
+        {halfWidth, -halfHeight, -halfDepth},
+        {halfWidth, halfHeight, -halfDepth},
+        {-halfWidth, halfHeight, -halfDepth},
+        {-halfWidth, -halfHeight, halfDepth},
+        {halfWidth, -halfHeight, halfDepth},
+        {halfWidth, halfHeight, halfDepth},
+        {-halfWidth, halfHeight, halfDepth}
+    };
+
+    for (int i = 0; i < 8; i++) {
+        rotateY(otherVertices[i], other->getColRotationY());
+    }
+
+    // Calculate min and max values for each axis
+    float minX = vertices[0][0], minY = vertices[0][1], minZ = vertices[0][2];
+    float maxX = vertices[0][0], maxY = vertices[0][1], maxZ = vertices[0][2];
+    for (int i = 0; i < 8; i++) {
+        if (vertices[i][0] < minX) minX = vertices[i][0];
+        if (vertices[i][0] > maxX) maxX = vertices[i][0];
+        if (vertices[i][1] < minY) minY = vertices[i][1];
+        if (vertices[i][1] > maxY) maxY = vertices[i][1];
+        if (vertices[i][2] < minZ) minZ = vertices[i][2];
+        if (vertices[i][2] > maxZ) maxZ = vertices[i][2];
+    }
+
+    float otherMinX = otherVertices[0][0], otherMinY = otherVertices[0][1], otherMinZ = otherVertices[0][2];
+    float otherMaxX = otherVertices[0][0], otherMaxY = otherVertices[0][1], otherMaxZ = otherVertices[0][2];
+    for (int i = 0; i < 8; i++) {
+        if (otherVertices[i][0] < otherMinX) otherMinX = otherVertices[i][0];
+        if (otherVertices[i][0] > otherMaxX) otherMaxX = otherVertices[i][0];
+        if (otherVertices[i][1] < otherMinY) otherMinY = otherVertices[i][1];
+        if (otherVertices[i][1] > otherMaxY) otherMaxY = otherVertices[i][1];
+        if (otherVertices[i][2] < otherMinZ) otherMinZ = otherVertices[i][2];
+        if (otherVertices[i][2] > otherMaxZ) otherMaxZ = otherVertices[i][2];
+    }
+
     // Check if the boxes are overlapping
-    float dx = colCenterX - other->colCenterX;
-    float dy = colCenterY - other->colCenterY;
-    float dz = colCenterZ - other->colCenterZ;
-    float distanceX = fabs(dx) - (colWidth + other->colWidth) / 2;
-    float distanceY = fabs(dy) - (colHeight + other->colHeight) / 2;
-    float distanceZ = fabs(dz) - (colDepth + other->colDepth) / 2;
-    return distanceX <= 0 && distanceY <= 0 && distanceZ <= 0;
+    return (minX + colCenterX <= otherMaxX + other->getColCenterX() &&
+            maxX + colCenterX >= otherMinX + other->getColCenterX() &&
+            minY + colCenterY <= otherMaxY + other->getColCenterY() &&
+            maxY + colCenterY >= otherMinY + other->getColCenterY() &&
+            minZ + colCenterZ <= otherMaxZ + other->getColCenterZ() &&
+            maxZ + colCenterZ >= otherMinZ + other->getColCenterZ());
 }
 
 void CollisionalBox::drawCollisionMock() {
+    if(!showCollisionMockups) return;
+    // Calculate the half dimensions
+    float halfWidth = colWidth / 2.0f;
+    float halfHeight = colHeight / 2.0f;
+    float halfDepth = colDepth / 2.0f;
+
+    // Define the 8 vertices of the cuboid relative to the origin
+    float vertices[8][3] = {
+        {-halfWidth, -halfHeight, -halfDepth},
+        {halfWidth, -halfHeight, -halfDepth},
+        {halfWidth, halfHeight, -halfDepth},
+        {-halfWidth, halfHeight, -halfDepth},
+        {-halfWidth, -halfHeight, halfDepth},
+        {halfWidth, -halfHeight, halfDepth},
+        {halfWidth, halfHeight, halfDepth},
+        {-halfWidth, halfHeight, halfDepth}
+    };
+
+    // Save the current matrix
     glPushMatrix();
+
     glLoadIdentity();
+
+    // Translate to the center point
     glTranslatef(colCenterX, colCenterY, colCenterZ);
-    glColor3f(0.0, 1.0, 0.0);
-    // draw using vertices
-    double halfW = colWidth / 2.0;
-    double halfH = colHeight / 2.0;
-    double halfD = colDepth / 2.0;
+    glRotatef(colRotationY, 0.0, 1.0, 0.0);
+    glColor3f(1.0, 0.0, 0.0);
     
-    // Define the vertices
-    double vertices[8][3] = {
-        {-halfW, -halfH, -halfD}, // v0
-        {halfW, -halfH, -halfD}, // v1
-        {halfW, halfH, -halfD}, // v2
-        {-halfW, halfH, -halfD}, // v3
-        {-halfW, -halfH, halfD}, // v4
-        {halfW, -halfH, halfD}, // v5
-        {halfW, halfH, halfD}, // v6
-        {-halfW, halfH, halfD}  // v7
-    };
+    // Set the line width
+    glLineWidth(2.0f); // You can adjust the value to make the lines thicker or thinner
 
-    // Define the edges
-    GLubyte indices[12][2] = {
-        {0, 1}, {1, 2}, {2, 3}, {3, 0}, // Bottom edges
-        {4, 5}, {5, 6}, {6, 7}, {7, 4}, // Top edges
-        {0, 4}, {1, 5}, {2, 6}, {3, 7}  // Side edges
-    };
-
-    // Draw edges using GL_LINES
+    // Draw the cuboid as a wireframe
     glBegin(GL_LINES);
-    for (int i = 0; i < 12; ++i) {
-        glVertex3dv(vertices[indices[i][0]]);
-        glVertex3dv(vertices[indices[i][1]]);
-    }
+    
+    // Front face
+    glVertex3fv(vertices[0]); glVertex3fv(vertices[1]);
+    glVertex3fv(vertices[1]); glVertex3fv(vertices[2]);
+    glVertex3fv(vertices[2]); glVertex3fv(vertices[3]);
+    glVertex3fv(vertices[3]); glVertex3fv(vertices[0]);
+
+    // Back face
+    glVertex3fv(vertices[4]); glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[5]); glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[6]); glVertex3fv(vertices[7]);
+    glVertex3fv(vertices[7]); glVertex3fv(vertices[4]);
+
+    // Connect front and back faces
+    glVertex3fv(vertices[0]); glVertex3fv(vertices[4]);
+    glVertex3fv(vertices[1]); glVertex3fv(vertices[5]);
+    glVertex3fv(vertices[2]); glVertex3fv(vertices[6]);
+    glVertex3fv(vertices[3]); glVertex3fv(vertices[7]);
+
     glEnd();
+
+    // Restore the original matrix
     glPopMatrix();
-    glDisable(GL_BLEND);
+}
+
+void rotateY(double vertex[3], double theta) {
+    double x = vertex[0];
+    double z = vertex[2];
+    vertex[0] = x * cos(theta) + z * sin(theta);
+    vertex[2] = -x * sin(theta) + z * cos(theta);
+    // y-coordinate remains the same
+}
+
+void rotateY(float vertex[3], double theta) {
+    float x = vertex[0];
+    float z = vertex[2];
+    vertex[0] = x * cos(theta) + z * sin(theta);
+    vertex[2] = -x * sin(theta) + z * cos(theta);
+    // y-coordinate remains the same
+}
+
+std::string generateRandomString() {
+    auto randchar = []() -> char {
+        const char charset[] =
+            "0123456789"
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            "abcdefghijklmnopqrstuvwxyz";
+        const size_t max_index = (sizeof(charset) - 1);
+        return charset[rand() % max_index];
+    };
+    std::string str(20, 0);
+    std::generate_n(str.begin(), 20, randchar);
+    return str;
 }

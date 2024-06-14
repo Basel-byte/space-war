@@ -4,6 +4,7 @@
 #include <math.h>
 #include <time.h>
 
+#include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <GL/glext.h>
 
@@ -21,7 +22,7 @@
 
 #define INTERVAL 2
 
-class Model: public CollisionalSphere {
+class Model {
 private:
     std::string prefix;
     std::vector<Material> materials;
@@ -47,18 +48,13 @@ private:
     void add_face_4vtn(std::string &line);
 
 public:
-    Model(double collisionRadius);
+    // Model(double collisionRadius);
     float pos_x, pos_y, pos_z;
     float tx, ty, tz;
     float rx, ry, rz;
 
     void load(const char *filename);
     void draw();
-    void drawCollisionMock();
-    bool checkCollision(Model another);
-    void collide() override;
-    void collideWith(Collisional* another) override;
-    // ~Model();
 };
 
 

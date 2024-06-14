@@ -1,9 +1,15 @@
-#include "Model.h"
+#include <GL/glew.h>
 #include <SOIL/SOIL.h>
 
-Model::Model(double collisionRadius){
-    colRadius = collisionRadius;
-}
+#include "Model.h"
+#include "constants.h"
+
+// Model::Model(double collisionRadius){
+//     colRadius = collisionRadius;
+//     colCenterX = 0.0f;
+//     colCenterY = 0.0f;
+//     colCenterZ = 0.0f;
+// }
 
 int Model::count_char(std::string &str, char ch)
 {
@@ -397,32 +403,8 @@ void Model::draw() {
     // glPushMatrix();
     //     glTranslatef(tx, 0.0f, 0.0f);
         glCallList(list); 
-        setCollisionCenterAsCurrent();
+        // setCollisionCenterAsCurrent();
     // glPopMatrix();
-}
-
-bool Model::checkCollision(Model another) {
-    return true;
-}
-
-void Model::collide() {
-    printf("Model Collide\n");
-}
-
-void Model::collideWith(Collisional* another) {
-    printf("Model Collide With\n");
-}
-
-void Model::drawCollisionMock(){
-    // Draw a mock for the collision detection
-        glPushMatrix();
-        glLoadIdentity();
-        glTranslatef(colCenterX, colCenterY, colCenterZ);
-        glColor3f(1.0, 0.0, 0.0);
-        glutWireSphere(colRadius, 20, 20);
-        glPopMatrix();
-        glDisable(GL_BLEND);
-        // cout << "Planet " << name << "(" << colCenterX << ", " << colCenterY << ", " << colCenterZ << ")" << endl;
 }
 
 // Model::~Model()

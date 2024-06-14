@@ -2,10 +2,17 @@
 
 #include <cmath>
 #include "SpaceObject.h"
+#include "planets.h"
 #include "menu.h"
 // 37 5 87.5
 #include "spaceDrawer.h"
 #include "animation.h"
+#include "CollisionManager.h"
+#include "constants.h"
+#include "missile.h"
+
+CollisionManager collisionManager;
+SpaceObject *planets[numberOfPlanets];
 
 void display()
 {
@@ -30,6 +37,7 @@ void display()
     else
     {
         drawSpace();
+        collisionManager.checkCollisions();
     }
 }
 
@@ -55,6 +63,33 @@ void keyInput(unsigned char key, int x, int y)
         break;
     case 'f': // For shooting Enemies
         if(isStarted) addMissile();
+        break;
+    case '[':
+        // if (missileDepth > 0.1f)
+            missileShiftX -= 0.1f;
+        cout << "missileShiftX: " << missileShiftX << endl;
+        break;
+    case ']':
+        missileShiftX += 0.1f;
+        cout << "missileShiftX: " << missileShiftX << endl;
+        break;
+    case 'p':
+        // if (missileWidth > 0.1f)
+            missileShiftY -= 0.1f;
+        cout << "missileShiftY: " << missileShiftY << endl;
+        break;
+    case 'o':
+        missileShiftY += 0.1f;
+        cout << "missileShiftY: " << missileShiftY << endl;
+        break;
+    case 'i':
+        // if (missileHeight > 0.1f)
+            missileShiftZ -= 0.1f;
+        cout << "missileShiftZ: " << missileShiftZ << endl;
+        break;
+    case 'u':
+        missileShiftZ += 0.1f;
+        cout << "missileShiftZ: " << missileShiftZ << endl;
         break;
     default:
         break;
@@ -128,6 +163,11 @@ void reshape(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
+const char* loadTexture(std::string planetName){
+     string filename = "src/textures/" + planetName + ".jpg";
+     return filename.c_str();
+}
+
 void init()
 {
     glEnable(GL_DEPTH_TEST);
@@ -150,14 +190,15 @@ void init()
     glutWireCone(5.0, 10.0, 10, 10);
     glPopMatrix();
     glEndList();
-    for (size_t i = 0; i < 9; i++)
+
+    planets[0] = new Sun(planetNames[0], planetsPositions[0], 0.0, 0.0, planetsRadius[0], 0.0, loadTexture(planetNames[0]));
+    planets[1] = new Saturn(planetNames[1], planetsPositions[1], 0.0, 0.0, planetsRadius[1], 0.0, loadTexture(planetNames[1]));
+
+    for (size_t i = 2; i < numberOfPlanets; i++)
     {
-        string filename = "src/textures/" + planetNames[i] + ".jpg";
+        const char* texture = loadTexture(planetNames[i]);
 
-        const char *filename_cstr = filename.c_str();
-
-        planets[i] = new SpaceObject(planetNames[i], planetsPositions[i], 0.0, 0.0, planetsRadius[i],
-                                     0.0, filename_cstr);
+        planets[i] = new SpaceObject(planetNames[i], planetsPositions[i], 0.0, 0.0, planetsRadius[i], 0.0, texture);
     }
 }
 

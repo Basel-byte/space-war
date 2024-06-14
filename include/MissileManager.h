@@ -5,30 +5,32 @@
 #include <iostream>
 #include "Model.h"
 #include "EffectManager.h"
+#include "missile.h"
 
 using namespace std;
 
-struct Missile{
-    Model missileModel{0.05};
-    int speed;
-    int lifetime;
-    float transX;
-    float transZ;
-    bool isFromPlayer;
-};
+// struct Missile{
+//     // Model missileModel{0.05};
+//     Model missileModel;
+//     int speed;
+//     int lifetime;
+//     float transX;
+//     float transZ;
+//     bool isFromPlayer;
+// };
 
 class MissileManager{
 private:
-    vector<Missile> missiles;
     int countOfEnemyMisslles = 0;
 
 public:
-
+    vector<Missile> missiles;
     void addMissile(float initialX, float initialZ, float angle, EffectManager* effectManager);
     void addMissile(float initialX, float initialZ, float destX, float destZ, EffectManager* effectManager);
     void updateMissles();
     void drawMissles();
     bool isAvailable();
+    void deleteMissile(int index);
 
 };
 

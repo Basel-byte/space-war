@@ -6,9 +6,9 @@
 #include <cstdlib>
 #include <ctime>
 
-#include "Model.h"
 #include "MissileManager.h"
 #include "EffectManager.h"
+#include "enemy.h"
 
 using namespace std;
 
@@ -28,9 +28,10 @@ public:
     bool forward = true;  
     int moveCounter = 0;  
 
-    std::vector<Model> enemyModels;  
+    std::vector<Enemy> enemys;  
     std::vector<float> shuttlePositions;
     void shootPlayer(MissileManager* missileManager, int playerPosX, int playerPosZ, EffectManager* effectManager);
+    void deleteEnemy(Enemy* enemy);
 };
 
 #endif
