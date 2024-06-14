@@ -1,5 +1,5 @@
-#ifndef SHOOTEFFECT_H
-#define SHOOTEFFECT_H
+#ifndef SOUND_H
+#define SOUND_H
 
 #include <vector>
 #include <iostream>

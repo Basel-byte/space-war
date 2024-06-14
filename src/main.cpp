@@ -6,8 +6,8 @@
 // 37 5 87.5
 #include "spaceDrawer.h"
 #include "animation.h"
-#include "sound.h"
-SoundEffect *soundEffect = new SoundEffect();
+#include "sound_service.h"
+SoundService soundService = SoundService();
 void display()
 {
     if (!isStarted)
@@ -46,7 +46,13 @@ void keyInput(unsigned char key, int x, int y)
         exit(0);
         break;
     case 'p':
-        soundEffect->playSound();
+        soundService.playSound("collision");
+        break;
+    case 'o':
+        soundService.playSound("explosion");
+        break;
+    case 'i':
+        soundService.playSound("shoot");
         break;
     case ' ':
         isStarted = !isStarted;
@@ -164,7 +170,7 @@ void init()
         planets[i] = new SpaceObject(planetNames[i], planetsPositions[i], 0.0, 0.0, planetsRadius[i],
                                      0.0, filename_cstr);
     }
-    soundEffect->initOpenAL();
+    soundService.initSoundService();
 }
 
 int prevMouseX = 0;
