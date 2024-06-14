@@ -4,6 +4,7 @@
 #include <math.h>
 #include <time.h>
 
+#include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <GL/glext.h>
 
@@ -14,6 +15,7 @@
 
 #include "Face.h"
 #include "Material.h"
+#include "Collisional.h"
 
 #define WIDTH 600
 #define HEIGHT 600
@@ -46,14 +48,13 @@ private:
     void add_face_4vtn(std::string &line);
 
 public:
+    // Model(double collisionRadius);
     float pos_x, pos_y, pos_z;
     float tx, ty, tz;
     float rx, ry, rz;
 
     void load(const char *filename);
     void draw();
-    bool checkCollision(Model another);
-    // ~Model();
 };
 
 
