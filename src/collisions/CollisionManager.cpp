@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "animation.h"
 #include "spaceDrawer.h"
+#include "PlayerHealthBar.h"
 
 CollisionManager::CollisionManager(){}
 
@@ -30,6 +31,20 @@ void CollisionManager::checkCollisions()
         collisionalTypes.push_back(CollisionType::ENEMY);
     }
 
+    // add pickables to the list
+    for (size_t i = 0; i < healthPickable.size(); ++i) {
+        collisionalSpheres.push_back(&healthPickable[i]);
+        collisionalSphereNames.push_back("healthPickable");
+        collisionalTypes.push_back(CollisionType::HEALTH_PICKABLE);
+    }
+
+    // add pickables to the list
+    for (size_t i = 0; i < weaponPickable.size(); ++i) {
+        collisionalSpheres.push_back(&weaponPickable[i]);
+        collisionalSphereNames.push_back("weaponPickable");
+        collisionalTypes.push_back(CollisionType::MISSILE_PICKABLE);
+    }
+
     // iterate through all the collisionals and check for collisions
     for (int i = 0; i < collisionalSpheres.size(); i++)
     {
@@ -54,7 +69,7 @@ void CollisionManager::checkCollisions()
         // cout << "missile " << i << " " << missile->id << " " << missile << endl;
         for(int j = 0; j < collisionalSpheres.size(); j++){
             // skip missile and enemy
-            if(collisionalTypes[j] == CollisionType::ENEMY){
+            if(collisionalTypes[j] == CollisionType::ENEMY && missile->isFromPlayer == false){
                 continue;
             }
             auto other = collisionalSpheres[j];
@@ -103,18 +118,20 @@ void CollisionManager::collide(Collisional* a, Collisional* b, CollisionType typ
 
 void CollisionManager::collidePlayer(Collisional* other, CollisionType type){
     if(type == CollisionType::PLANET){
-        // decrease health by 100;
+        playerHealthBar.changeHealth(-0.1f);
         xVal -= 10.0;
     } else if (type == CollisionType::ENEMY){
-        // decrease health by 100;
+        playerHealthBar.changeHealth(-0.1f);
     } else if (type == CollisionType::MISSILE){
-        // decrease health by 100;
+        playerHealthBar.changeHealth(-0.2f);
     } 
 }
 
 void CollisionManager::collideEnemy(Collisional* enemy, Collisional* other, CollisionType type){
     cout << "Adding collision effect" << endl;
     effectManager.addCollisionEffect(enemy->getColCenterX(), enemy->getColCenterY(), enemy->getColCenterZ());
+    // add a new pickable at the location of the enemy
+    addRandomPickable(enemy->getColCenterX(), enemy->getColCenterZ(), enemy->getColCenterY());
 }
 
 void CollisionManager::collideMissile(Collisional* missile, Collisional* other, CollisionType type){
@@ -122,3 +139,26 @@ void CollisionManager::collideMissile(Collisional* missile, Collisional* other, 
     effectManager.addCollisionEffect(missile->getColCenterX(), missile->getColCenterY(), missile->getColCenterZ());
 }
 
+void CollisionManager::collideHealthPickable(Collisional* pickable, Collisional* other, CollisionType type){
+    playerHealthBar.changeHealth(0.2f);
+}
+
+void CollisionManager::collideMissilePickable(Collisional* pickable, Collisional* other, CollisionType type){
+    // increase missile power
+}
+
+SpaceObject generateWeaponPickable(float x, float y, float z){
+    return SpaceObject(" ", x, y, z, 3.0, 0, "src/textures/green.png");
+}
+
+SpaceObject generateHealthPickable(float x, float y, float z){
+    return SpaceObject(" ", x, y, z, 3.0, 0, "src/textures/solid_red.jpeg");
+}
+
+void addRandomPickable(float x, float y, float z){
+    if(rand() % 2 == 0){
+        weaponPickable.push_back(generateWeaponPickable(x, y, z));
+    } else {
+        healthPickable.push_back(generateHealthPickable(x, y, z));
+    }
+}

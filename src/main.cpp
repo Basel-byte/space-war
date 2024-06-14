@@ -11,6 +11,7 @@
 #include "CollisionManager.h"
 #include "constants.h"
 #include "missile.h"
+#include "PlayerHealthBar.h"
 
 CollisionManager collisionManager;
 SpaceObject *planets[numberOfPlanets];
@@ -37,6 +38,12 @@ void display()
     }
     else
     {
+        if(playerHealthBar.getHealthPercentage() <= 1e-3){
+            isStarted = false;
+            selected = 2;
+            glutPostRedisplay();
+            return;
+        }
         drawSpace();
         collisionManager.checkCollisions();
     }
@@ -55,6 +62,21 @@ void keyInput(unsigned char key, int x, int y)
         break;
     case ' ':
         isStarted = !isStarted;
+        playerHealthBar.changeHealth(100.0f);
+        switch (selected)
+        {
+        case 0:
+            exit(0);
+            break;
+        case 1:
+            startBarDecay();
+            break;
+        case 2:
+            // survivalMode;
+            break;
+        default:
+            break;
+        }
         glutPostRedisplay();
 
         break;

@@ -26,6 +26,7 @@ public:
     void changeHealth(float percentage);
     void changeHealth(int time);
     void renderHealthBar();
+    float getHealthPercentage() { return healthPercentage; }
 };
 
 

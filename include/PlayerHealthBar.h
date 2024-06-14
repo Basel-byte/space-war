@@ -3,16 +3,10 @@
 
 #include "HealthBar.h"
 
-HealthBar playerHealthBar;
+extern HealthBar playerHealthBar;
 
-void startBarDecay(int time)
-{
-    playerHealthBar.changeHealth(time);
-    glutTimerFunc(time, startBarDecay, time);
-}
+void startBarDecay(int time);
 
-void startBarDecay() {
-    glutTimerFunc(playerHealthBar.reRenderTime, startBarDecay, playerHealthBar.reRenderTime);
-}
+void startBarDecay();
 
 #endif
