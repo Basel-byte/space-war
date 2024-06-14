@@ -6,7 +6,8 @@
 // 37 5 87.5
 #include "spaceDrawer.h"
 #include "animation.h"
-
+#include "sound.h"
+SoundEffect *soundEffect = new SoundEffect();
 void display()
 {
     if (!isStarted)
@@ -44,6 +45,9 @@ void keyInput(unsigned char key, int x, int y)
     case 27:
         exit(0);
         break;
+    case 'p':
+        soundEffect->playSound();
+        break;
     case ' ':
         isStarted = !isStarted;
         glutPostRedisplay();
@@ -54,7 +58,8 @@ void keyInput(unsigned char key, int x, int y)
         glutPostRedisplay();
         break;
     case 'f': // For shooting Enemies
-        if(isStarted) addMissile();
+        if (isStarted)
+            addMissile();
         break;
     default:
         break;
@@ -159,11 +164,11 @@ void init()
         planets[i] = new SpaceObject(planetNames[i], planetsPositions[i], 0.0, 0.0, planetsRadius[i],
                                      0.0, filename_cstr);
     }
+    soundEffect->initOpenAL();
 }
 
 int prevMouseX = 0;
 int prevMouseY = 0;
-
 
 void mouseMotion(int x, int y)
 {
@@ -176,7 +181,7 @@ void mouseMotion(int x, int y)
 
         // Calculate the angle between the mouse position and the center of the screen
         float angle = atan2(deltaY, deltaX) * 180.0f / M_PI;
-        
+
         // Adjust the angle to be in the range [0, 360]
         if (angle < 0.0f)
             angle += 360.0f;
@@ -212,5 +217,6 @@ int main(int argc, char **argv)
     glutPassiveMotionFunc(mouseMotion);
 
     glutMainLoop();
+
     return 0;
 }
