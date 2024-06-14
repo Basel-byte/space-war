@@ -1,6 +1,7 @@
 #include "spaceDrawer.h"
 #include "PlayerHealthBar.h"
 
+int width = 960, height = 580; // Width and height of the viewport.
 int selected = 0;
 // Globals.
 float xAngle = 0.0, yAngle = 0.0, zAngle = 0.0; // Angles to rotate scene.
